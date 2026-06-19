@@ -1,0 +1,3363 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="سلام سبيس - منصة الطالب الباحث عن المنح الدراسية. أدوات مجانية: تحويل PDF، ضغط الملفات، إنشاء السيرة الذاتية، ترجمة الوثائق، اختبار مستوى اللغة العربية.">
+  <meta name="keywords" content="منح دراسية, سيرة ذاتية طالب, تحويل PDF, ضغط PDF, ترجمة وثائق, طلب بعثة, اختبار لغة عربية">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="سلام سبيس - أدوات الطالب الباحث عن المنح">
+  <meta property="og:description" content="جميع الأدوات التي تحتاجها لتقديم ملف منحتك الدراسية في مكان واحد">
+  <meta property="og:type" content="website">
+  <title>سلام سبيس | أدوات المنح الدراسية</title>
+
+  <!-- Google Fonts: Cairo -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+
+  <!-- PDF.js for reading PDFs -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <!-- pdf-lib for creating/merging PDFs -->
+  <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <!-- jsPDF for generating PDFs -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <!-- html2canvas for CV/Translation export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+  <style>
+    /* ===== DESIGN SYSTEM ===== */
+    :root {
+      --ink: #1C2B22;
+      --forest: #1B4D3E;
+      --sage: #2D7A5F;
+      --clay: #C96B3F;
+      --sand: #E8C99A;
+      --paper: #FAF6EE;
+      --white: #FFFFFF;
+      --muted: #7A8C84;
+      --border: #D6CFC2;
+      --shadow: rgba(28, 43, 34, 0.10);
+      --font: 'Cairo', 'Segoe UI', Tahoma, sans-serif;
+      --r: 12px;
+      --r-sm: 6px;
+      --transition: 0.25s cubic-bezier(.4, 0, .2, 1);
+      --rose: #E8436E;
+      --rose-light: #FCE4EC;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--paper);
+      color: var(--ink);
+      line-height: 1.7;
+      font-size: 16px;
+    }
+
+    /* ===== HEADER / NAV ===== */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--forest);
+      box-shadow: 0 2px 16px var(--shadow);
+    }
+
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 68px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--white);
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--rose);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 900;
+      color: var(--white);
+      border: 2px solid var(--sand);
+      flex-shrink: 0;
+    }
+
+    .logo-text {
+      font-size: 1.2rem;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+    .logo-text span {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 300;
+      opacity: 0.8;
+    }
+
+    nav {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    nav a {
+      color: rgba(255, 255, 255, 0.85);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 600;
+      padding: 8px 14px;
+      border-radius: var(--r-sm);
+      transition: var(--transition);
+      white-space: nowrap;
+    }
+    nav a:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: var(--white);
+    }
+
+    .btn-nav {
+      background: var(--clay);
+      color: var(--white) !important;
+      padding: 8px 18px !important;
+      border-radius: 20px !important;
+    }
+    .btn-nav:hover {
+      background: #b85c32 !important;
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 6px;
+    }
+    .hamburger span {
+      width: 24px;
+      height: 2px;
+      background: var(--white);
+      border-radius: 2px;
+      transition: var(--transition);
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      background: linear-gradient(135deg, var(--forest) 0%, var(--sage) 100%);
+      color: var(--white);
+      padding: 80px 24px 60px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      max-width: 780px;
+      margin: 0 auto;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(201, 107, 63, 0.25);
+      border: 1px solid rgba(201, 107, 63, 0.6);
+      color: var(--sand);
+      padding: 5px 16px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+      letter-spacing: 0.05em;
+    }
+
+    .hero h1 {
+      font-size: clamp(1.8rem, 5vw, 3rem);
+      font-weight: 900;
+      line-height: 1.25;
+      margin-bottom: 16px;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      color: var(--sand);
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+      opacity: 0.88;
+      max-width: 600px;
+      margin: 0 auto 32px;
+    }
+
+    .hero-btns {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--clay);
+      color: var(--white);
+      padding: 14px 28px;
+      border-radius: 28px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1rem;
+      font-family: var(--font);
+      border: none;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-primary:hover {
+      background: #b85c32;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(201, 107, 63, 0.4);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--white);
+      padding: 14px 28px;
+      border-radius: 28px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      font-family: var(--font);
+      border: 2px solid rgba(255, 255, 255, 0.5);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .btn-outline:hover {
+      border-color: var(--white);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* ===== STATS BAR ===== */
+    .stats-bar {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 0;
+    }
+    .stats-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      divide: var(--border);
+    }
+    .stat-item {
+      padding: 24px 20px;
+      text-align: center;
+      border-left: 1px solid var(--border);
+    }
+    .stat-item:last-child {
+      border-left: none;
+    }
+    .stat-num {
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--forest);
+    }
+    .stat-label {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* ===== SECTIONS ===== */
+    .section {
+      padding: 72px 24px;
+    }
+    .section-alt {
+      background: var(--white);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--clay);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .section-title {
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      font-weight: 900;
+      color: var(--ink);
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+    .section-desc {
+      color: var(--muted);
+      max-width: 540px;
+      font-size: 1rem;
+    }
+
+    /* ===== TOOLS GRID ===== */
+    .tools-header {
+      margin-bottom: 40px;
+    }
+
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 20px;
+    }
+
+    .tool-card {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r);
+      padding: 24px 20px;
+      cursor: pointer;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    .tool-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--clay);
+      transform: scaleY(0);
+      transform-origin: top;
+      transition: var(--transition);
+    }
+    .tool-card:hover {
+      border-color: var(--sage);
+      box-shadow: 0 8px 32px var(--shadow);
+      transform: translateY(-3px);
+    }
+    .tool-card:hover::before {
+      transform: scaleY(1);
+    }
+
+    .tool-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, var(--forest), var(--sage));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      margin-bottom: 12px;
+    }
+
+    .tool-card h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: var(--ink);
+    }
+    .tool-card p {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .tool-tag {
+      display: inline-block;
+      margin-top: 10px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--sage);
+      background: rgba(45, 122, 95, 0.1);
+      padding: 2px 10px;
+      border-radius: 12px;
+    }
+
+    /* ===== MODAL ===== */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(28, 43, 34, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      overflow-y: auto;
+    }
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--white);
+      border-radius: var(--r);
+      width: 100%;
+      max-width: 720px;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.25);
+      animation: modalIn 0.3s cubic-bezier(.4, 0, .2, 1);
+    }
+
+    @keyframes modalIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.96);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .modal-header {
+      background: var(--forest);
+      color: var(--white);
+      padding: 18px 24px;
+      border-radius: var(--r) var(--r) 0 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    .modal-header h2 {
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .modal-close {
+      background: rgba(255, 255, 255, 0.15);
+      border: none;
+      color: var(--white);
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1.2rem;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+    .modal-close:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .modal-body {
+      padding: 24px;
+    }
+
+    /* ===== UPLOAD ZONE ===== */
+    .upload-zone {
+      border: 2px dashed var(--border);
+      border-radius: var(--r);
+      padding: 32px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition);
+      background: var(--paper);
+    }
+    .upload-zone:hover,
+    .upload-zone.drag-over {
+      border-color: var(--sage);
+      background: rgba(45, 122, 95, 0.05);
+    }
+    .upload-zone .up-icon {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+    .upload-zone h3 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+    .upload-zone p {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    .upload-zone input[type="file"] {
+      display: none;
+    }
+
+    /* ===== FORM ELEMENTS ===== */
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="url"],
+    input[type="date"],
+    input[type="number"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-sm);
+      font-family: var(--font);
+      font-size: 0.92rem;
+      color: var(--ink);
+      background: var(--white);
+      transition: var(--transition);
+      outline: none;
+    }
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--sage);
+      box-shadow: 0 0 0 3px rgba(45, 122, 95, 0.12);
+    }
+    textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--forest);
+      color: var(--white);
+      border: none;
+      padding: 10px 22px;
+      border-radius: 22px;
+      font-family: var(--font);
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+    .btn-action:hover {
+      background: var(--sage);
+      transform: translateY(-1px);
+    }
+    .btn-action.clay {
+      background: var(--clay);
+    }
+    .btn-action.clay:hover {
+      background: #b85c32;
+    }
+    .btn-action.danger {
+      background: #c0392b;
+    }
+    .btn-action.danger:hover {
+      background: #a93226;
+    }
+    .btn-action:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-sm {
+      padding: 6px 14px !important;
+      font-size: 0.78rem !important;
+      border-radius: 14px !important;
+    }
+
+    .alert {
+      padding: 10px 16px;
+      border-radius: var(--r-sm);
+      font-size: 0.85rem;
+      margin: 10px 0;
+    }
+    .alert-success {
+      background: rgba(27, 77, 62, 0.1);
+      color: var(--forest);
+      border: 1px solid rgba(27, 77, 62, 0.2);
+    }
+    .alert-error {
+      background: rgba(201, 107, 63, 0.1);
+      color: #8B3A1E;
+      border: 1px solid rgba(201, 107, 63, 0.2);
+    }
+    .alert-info {
+      background: rgba(45, 122, 95, 0.08);
+      color: var(--sage);
+      border: 1px solid rgba(45, 122, 95, 0.2);
+    }
+
+    .result-box {
+      background: var(--paper);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r);
+      padding: 18px;
+      margin-top: 14px;
+      display: none;
+    }
+    .result-box.show {
+      display: block;
+    }
+
+    .spinner {
+      width: 32px;
+      height: 32px;
+      border: 3px solid var(--border);
+      border-top-color: var(--forest);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 12px auto;
+      display: none;
+    }
+    .spinner.show {
+      display: block;
+    }
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* ===== CV PREVIEW - CORRECTED ===== */
+    #cv-preview {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--r-sm);
+      margin-top: 16px;
+      font-family: 'Arial', 'Helvetica', 'Tahoma', sans-serif;
+      overflow: hidden;
+      direction: ltr;
+      text-align: right;
+    }
+    #cv-preview * {
+      direction: rtl;
+      font-family: 'Arial', 'Helvetica', 'Tahoma', sans-serif;
+    }
+    .cv-header-bar {
+      background: var(--forest);
+      color: var(--white);
+      padding: 24px 20px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+    .cv-photo-circle {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 3px solid var(--sand);
+      object-fit: cover;
+      flex-shrink: 0;
+      background: var(--sage);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      color: rgba(255, 255, 255, 0.5);
+      overflow: hidden;
+    }
+    .cv-photo-circle img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .cv-name {
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+    .cv-title-role {
+      font-size: 0.85rem;
+      opacity: 0.85;
+      margin: 2px 0 8px;
+    }
+    .cv-contacts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-size: 0.75rem;
+      opacity: 0.9;
+    }
+    .cv-body {
+      padding: 16px 20px;
+    }
+    .cv-section {
+      margin-bottom: 14px;
+    }
+    .cv-section-title {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--clay);
+      border-bottom: 2px solid var(--clay);
+      padding-bottom: 3px;
+      margin-bottom: 8px;
+    }
+    .cv-section-body {
+      font-size: 0.8rem;
+      color: var(--ink);
+      line-height: 1.7;
+      white-space: pre-line;
+    }
+    .cv-footer {
+      border-top: 1px solid var(--border);
+      padding: 8px 20px;
+      font-size: 0.65rem;
+      color: var(--muted);
+      text-align: center;
+      direction: rtl;
+    }
+
+    /* ===== TRANSLATION RESULT ===== */
+    .translate-doc {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r);
+      overflow: hidden;
+      margin-top: 16px;
+      display: none;
+      direction: rtl;
+    }
+    .translate-doc.show {
+      display: block;
+    }
+    .translate-doc-header {
+      background: var(--forest);
+      color: var(--white);
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .translate-doc-stamp {
+      width: 54px;
+      height: 54px;
+      border: 2px solid var(--clay);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.55rem;
+      font-weight: 700;
+      text-align: center;
+      color: var(--clay);
+      line-height: 1.2;
+    }
+    .translate-doc-body {
+      padding: 20px;
+    }
+    .translate-doc-body p {
+      margin-bottom: 6px;
+    }
+    .translate-doc-body .translated-text {
+      font-size: 0.95rem;
+      line-height: 2;
+      color: var(--ink);
+      white-space: pre-line;
+    }
+    .translate-doc-footer {
+      border-top: 1px solid var(--border);
+      padding: 12px 18px;
+      font-size: 0.75rem;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .translate-doc-sig {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--forest);
+      border-top: 1px solid var(--forest);
+      padding-top: 4px;
+      margin-top: 20px;
+      text-align: left;
+    }
+    .translate-doc-footer .domain {
+      font-weight: 700;
+      color: var(--forest);
+    }
+    .translate-doc-body .warning-note {
+      margin-top: 10px;
+      font-size: 0.78rem;
+      color: var(--muted);
+      border-top: 1px dashed var(--border);
+      padding-top: 10px;
+    }
+
+    /* ===== TEST DE NIVEAU ===== */
+    .test-container {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .test-question {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r);
+      padding: 18px 20px;
+      margin-bottom: 14px;
+    }
+    .test-question .q-number {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--clay);
+      margin-bottom: 4px;
+    }
+    .test-question .q-text {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .test-question .q-options label {
+      display: block;
+      padding: 6px 12px;
+      margin: 4px 0;
+      border-radius: var(--r-sm);
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 0.92rem;
+      border: 1px solid transparent;
+    }
+    .test-question .q-options label:hover {
+      background: var(--paper);
+    }
+    .test-question .q-options input[type="radio"] {
+      margin-left: 10px;
+      accent-color: var(--forest);
+    }
+    .test-question.correct {
+      border-color: var(--sage);
+      background: rgba(45, 122, 95, 0.05);
+    }
+    .test-question.wrong {
+      border-color: var(--clay);
+      background: rgba(201, 107, 63, 0.05);
+    }
+    .test-question .q-result {
+      margin-top: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    .test-question .q-result.correct {
+      color: var(--sage);
+    }
+    .test-question .q-result.wrong {
+      color: var(--clay);
+    }
+
+    .test-timer {
+      font-size: 1.2rem;
+      font-weight: 900;
+      color: var(--clay);
+      text-align: center;
+      margin-bottom: 20px;
+      padding: 10px;
+      background: var(--paper);
+      border-radius: var(--r);
+      border: 1px solid var(--border);
+    }
+    .test-timer.warning {
+      color: #c0392b;
+      animation: pulse 0.8s infinite;
+    }
+    @keyframes pulse {
+      0%,
+      100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.5;
+      }
+    }
+
+    /* ===== CERTIFICATE ===== */
+    .certificate {
+      background: #f5efe8;
+      border: 6px double var(--forest);
+      border-radius: var(--r);
+      padding: 35px 30px 25px;
+      text-align: center;
+      direction: rtl;
+      position: relative;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+    }
+    .certificate::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(27, 77, 62, 0.02) 10px, rgba(27, 77, 62, 0.02) 11px),
+        repeating-linear-gradient(-45deg, transparent, transparent 10px, rgba(27, 77, 62, 0.02) 10px, rgba(27, 77, 62, 0.02) 11px),
+        radial-gradient(circle at 20% 30%, rgba(232, 67, 110, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(232, 67, 110, 0.03) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .certificate>* {
+      position: relative;
+      z-index: 1;
+    }
+    .certificate::after {
+      content: 'سلام سبيس';
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 5rem;
+      font-weight: 900;
+      color: rgba(27, 77, 62, 0.04);
+      letter-spacing: 0.2em;
+      transform: rotate(-15deg);
+      pointer-events: none;
+      z-index: 0;
+      font-family: 'Cairo', sans-serif;
+    }
+    .certificate .cert-border {
+      position: absolute;
+      inset: 12px;
+      border: 1px solid rgba(27, 77, 62, 0.12);
+      border-radius: calc(var(--r) - 4px);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .certificate .cert-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--border);
+      position: relative;
+      z-index: 1;
+      gap: 12px;
+    }
+    .certificate .cert-logo-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--rose);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: 900;
+      color: var(--white);
+      border: 2px solid var(--forest);
+      flex-shrink: 0;
+    }
+    .certificate .cert-logo-text h3 {
+      font-size: 1.1rem;
+      font-weight: 900;
+      color: var(--forest);
+    }
+    .certificate .cert-logo-text span {
+      font-size: 0.65rem;
+      color: var(--muted);
+      display: block;
+    }
+    .certificate h2 {
+      color: var(--forest);
+      font-size: 1.2rem;
+      margin-bottom: 2px;
+    }
+    .certificate .sub {
+      color: var(--muted);
+      font-size: 0.8rem;
+      margin-bottom: 8px;
+    }
+    .certificate .candidate-name {
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--ink);
+      margin: 8px 0;
+    }
+    .certificate .level {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--clay);
+      margin: 4px 0;
+    }
+    .certificate .score {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+    .certificate .stamp {
+      margin-top: 14px;
+      font-size: 0.75rem;
+      color: var(--forest);
+      border-top: 1px solid var(--border);
+      padding-top: 10px;
+    }
+    .certificate .cert-id {
+      font-size: 0.65rem;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* ===== ABOUT SECTION ===== */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+    }
+    .about-text .about-features {
+      list-style: none;
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .about-text .about-features li {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      font-size: 0.95rem;
+      padding: 14px 18px;
+      background: var(--white);
+      border-radius: var(--r-sm);
+      border-right: 4px solid var(--clay);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      transition: var(--transition);
+    }
+    .about-text .about-features li:hover {
+      transform: translateX(-4px);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    }
+    .about-text .about-features li .feat-icon {
+      font-size: 1.4rem;
+      flex-shrink: 0;
+    }
+    .about-text .about-features li .feat-text {
+      font-weight: 500;
+    }
+    .about-text .about-features li .feat-text small {
+      display: block;
+      font-weight: 400;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+    .about-visual {
+      background: linear-gradient(145deg, var(--forest), var(--sage));
+      border-radius: var(--r);
+      padding: 40px 32px;
+      color: var(--white);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .about-visual::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M20 0l8 12-8-4-8 4z'/%3E%3C/g%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+    .about-visual .big-stamp {
+      width: 120px;
+      height: 120px;
+      border: 3px solid var(--sand);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      line-height: 1.4;
+      text-align: center;
+      color: var(--sand);
+      position: relative;
+      z-index: 1;
+    }
+    .about-visual p {
+      font-size: 0.95rem;
+      opacity: 0.9;
+      position: relative;
+      z-index: 1;
+    }
+    .about-visual .decoration {
+      position: absolute;
+      font-size: 6rem;
+      opacity: 0.06;
+      bottom: -20px;
+      left: -20px;
+      z-index: 0;
+    }
+
+    /* ===== TIPS SECTION ===== */
+    .tips-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 24px;
+      margin-top: 32px;
+    }
+    .tip-card {
+      background: var(--white);
+      border-radius: var(--r);
+      padding: 28px 24px;
+      border-right: 4px solid var(--clay);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    .tip-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--clay), var(--sand));
+      opacity: 0;
+      transition: var(--transition);
+    }
+    .tip-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+    }
+    .tip-card:hover::before {
+      opacity: 1;
+    }
+    .tip-card .tip-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+    .tip-card .tip-num {
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--clay);
+      opacity: 0.3;
+      line-height: 1;
+    }
+    .tip-card .tip-icon {
+      font-size: 1.6rem;
+    }
+    .tip-card .tip-title {
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: 4px;
+    }
+    .tip-card .tip-text {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+    .tip-card .tip-tag {
+      display: inline-block;
+      margin-top: 10px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--sage);
+      background: rgba(45, 122, 95, 0.08);
+      padding: 2px 12px;
+      border-radius: 12px;
+    }
+
+    /* ===== FAQ PROFESSIONNELLE ===== */
+    .faq-wrapper {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+    .faq-item-pro {
+      background: var(--white);
+      border-radius: var(--r);
+      margin-bottom: 12px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      transition: var(--transition);
+    }
+    .faq-item-pro:hover {
+      border-color: var(--sage);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
+    .faq-item-pro .faq-q-pro {
+      padding: 16px 20px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      user-select: none;
+      background: var(--white);
+      transition: var(--transition);
+    }
+    .faq-item-pro .faq-q-pro:hover {
+      background: var(--paper);
+    }
+    .faq-item-pro .faq-q-pro .faq-icon {
+      font-size: 1.2rem;
+      color: var(--clay);
+      flex-shrink: 0;
+    }
+    .faq-item-pro .faq-q-pro .faq-arrow {
+      margin-right: auto;
+      color: var(--muted);
+      font-size: 0.9rem;
+      transition: var(--transition);
+    }
+    .faq-item-pro.open .faq-q-pro .faq-arrow {
+      transform: rotate(180deg);
+      color: var(--clay);
+    }
+    .faq-item-pro .faq-a-pro {
+      padding: 0 20px;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, padding 0.4s ease;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.8;
+    }
+    .faq-item-pro.open .faq-a-pro {
+      max-height: 400px;
+      padding: 0 20px 18px;
+    }
+    .faq-item-pro .faq-a-pro p {
+      margin-bottom: 0;
+    }
+
+    /* ===== CONTACT ===== */
+    .contact-methods {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin: 16px 0;
+    }
+    .contact-method {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: var(--r-sm);
+      text-decoration: none;
+      color: var(--ink);
+      transition: var(--transition);
+      font-weight: 600;
+    }
+    .contact-method:hover {
+      background: var(--white);
+      border-color: var(--sage);
+      transform: translateY(-2px);
+    }
+    .contact-method .icon {
+      font-size: 1.3rem;
+    }
+    .contact-method .label {
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: var(--ink);
+      color: rgba(255, 255, 255, 0.75);
+      padding: 40px 24px 20px;
+    }
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 30px;
+      margin-bottom: 30px;
+    }
+    .footer-brand .logo-text-footer {
+      font-size: 1.1rem;
+      font-weight: 900;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+    .footer-brand p {
+      font-size: 0.82rem;
+      line-height: 1.7;
+    }
+    .footer-col h4 {
+      color: var(--white);
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .footer-col a {
+      display: block;
+      color: rgba(255, 255, 255, 0.65);
+      text-decoration: none;
+      font-size: 0.82rem;
+      margin-bottom: 6px;
+    }
+    .footer-col a:hover {
+      color: var(--sand);
+    }
+    .footer-bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .footer-bottom a {
+      color: var(--sand);
+      text-decoration: none;
+    }
+
+    /* ===== PAGES ===== */
+    .page-section {
+      display: none;
+    }
+    .page-section.active {
+      display: block;
+    }
+    #home-page.active {
+      display: block;
+    }
+
+    .policy-content {
+      max-width: 760px;
+      margin: 0 auto;
+      background: var(--white);
+      padding: 32px;
+      border-radius: var(--r);
+      border: 1px solid var(--border);
+    }
+    .policy-content h1 {
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: var(--forest);
+      margin-bottom: 20px;
+    }
+    .policy-content h2 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin: 20px 0 8px;
+    }
+    .policy-content p {
+      color: var(--muted);
+      margin-bottom: 10px;
+      font-size: 0.92rem;
+    }
+
+    /* ===== MOBILE NAV ===== */
+    .mobile-nav {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--forest);
+      z-index: 500;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+    }
+    .mobile-nav.open {
+      display: flex;
+    }
+    .mobile-nav a {
+      color: var(--white);
+      text-decoration: none;
+      font-size: 1.2rem;
+      font-weight: 700;
+      padding: 10px 24px;
+      border-radius: var(--r-sm);
+      transition: var(--transition);
+    }
+    .mobile-nav a:hover {
+      background: rgba(255, 255, 255, 0.12);
+    }
+    .mobile-close {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      background: none;
+      border: none;
+      color: var(--white);
+      font-size: 1.8rem;
+      cursor: pointer;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      nav {
+        display: none;
+      }
+      .hamburger {
+        display: flex;
+      }
+
+      .stats-inner {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .stat-item:nth-child(2) {
+        border-left: 1px solid var(--border);
+      }
+      .stat-item:nth-child(3) {
+        border-left: none;
+      }
+
+      .about-grid {
+        grid-template-columns: 1fr;
+      }
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+      .modal {
+        max-height: 95vh;
+      }
+      .hero {
+        padding: 50px 16px 36px;
+      }
+      .contact-methods {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .stats-inner {
+        grid-template-columns: 1fr 1fr;
+      }
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+      .stat-item {
+        border-left: 1px solid var(--border);
+      }
+      .stat-item:nth-child(1),
+      .stat-item:nth-child(3) {
+        border-left: none;
+      }
+      .certificate .cert-header {
+        flex-direction: column;
+        gap: 8px;
+        align-items: center;
+      }
+    }
+
+    .thumb-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .thumb-item {
+      width: 80px;
+      height: 80px;
+      border-radius: var(--r-sm);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--paper);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      color: var(--muted);
+      text-align: center;
+    }
+    .thumb-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--forest);
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 0;
+      border-bottom: 2px solid var(--border);
+      margin-bottom: 20px;
+      overflow-x: auto;
+    }
+    .tab-btn {
+      padding: 10px 18px;
+      background: none;
+      border: none;
+      font-family: var(--font);
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--muted);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      transition: var(--transition);
+      white-space: nowrap;
+    }
+    .tab-btn.active {
+      color: var(--forest);
+      border-bottom-color: var(--forest);
+    }
+    .tab-panel {
+      display: none;
+    }
+    .tab-panel.active {
+      display: block;
+    }
+
+    .download-site-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.15);
+      color: var(--white);
+      padding: 8px 18px;
+      border-radius: 24px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.85rem;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: var(--transition);
+      cursor: pointer;
+      margin-top: 12px;
+    }
+    .download-site-btn:hover {
+      background: rgba(255, 255, 255, 0.25);
+      border-color: var(--white);
+    }
+
+    .file-list {
+      margin-top: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .file-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: var(--r-sm);
+      padding: 8px 12px;
+    }
+    .file-item-name {
+      font-size: 0.85rem;
+      color: var(--ink);
+      font-weight: 600;
+    }
+    .file-item-size {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+    .file-remove {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--clay);
+      font-size: 1rem;
+    }
+
+    .test-progress {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding: 10px 16px;
+      background: var(--paper);
+      border-radius: var(--r);
+      border: 1px solid var(--border);
+    }
+    .test-progress .progress-text {
+      font-weight: 700;
+      color: var(--forest);
+    }
+
+    .install-guide {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: var(--r);
+      padding: 16px 20px;
+      margin-top: 16px;
+      display: none;
+      text-align: right;
+    }
+    .install-guide.show {
+      display: block;
+    }
+    .install-guide h4 {
+      color: var(--sand);
+      margin-bottom: 8px;
+    }
+    .install-guide ol {
+      padding-right: 20px;
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.85);
+    }
+    .install-guide ol li {
+      margin-bottom: 4px;
+    }
+
+    .faq-list {
+      max-width: 700px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .faq-item {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r);
+      overflow: hidden;
+    }
+    .faq-q {
+      padding: 18px 20px;
+      cursor: pointer;
+      font-weight: 700;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+    }
+    .faq-q::after {
+      content: '＋';
+      color: var(--clay);
+      font-size: 1.2rem;
+    }
+    .faq-item.open .faq-q::after {
+      content: '－';
+    }
+    .faq-a {
+      padding: 0 20px;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s;
+    }
+    .faq-item.open .faq-a {
+      max-height: 300px;
+      padding: 0 20px 18px;
+    }
+    .faq-a p {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <header>
+    <div class="nav-inner">
+      <a href="#" class="logo" onclick="showPage('home')">
+        <div class="logo-icon">س</div>
+        <div class="logo-text">
+          سلام سبيس
+          <span>SalamSpace — أدوات المنح الدراسية</span>
+        </div>
+      </a>
+      <nav>
+        <a href="#tools" onclick="showPage('home')">الأدوات</a>
+        <a href="#tips" onclick="showPage('home')">نصائح</a>
+        <a href="#faq" onclick="showPage('home')">أسئلة</a>
+        <a href="#" onclick="showPage('about')">عن الموقع</a>
+        <a href="#tools" class="btn-nav" onclick="showPage('home')">🚀 ابدأ الآن</a>
+      </nav>
+      <button class="hamburger" onclick="toggleMobileNav()" aria-label="القائمة">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile Nav -->
+  <div class="mobile-nav" id="mobileNav">
+    <button class="mobile-close" onclick="toggleMobileNav()">✕</button>
+    <a href="#tools" onclick="showPage('home'); toggleMobileNav();">الأدوات</a>
+    <a href="#tips" onclick="showPage('home'); toggleMobileNav();">نصائح</a>
+    <a href="#faq" onclick="showPage('home'); toggleMobileNav();">أسئلة شائعة</a>
+    <a href="#" onclick="showPage('about'); toggleMobileNav();">عن الموقع</a>
+    <a href="#" onclick="showPage('contact'); toggleMobileNav();">تواصل معنا</a>
+  </div>
+
+  <!-- ===== HOME PAGE ===== -->
+  <div id="home-page" class="page-section active">
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-content">
+        <div class="hero-badge">🎓 للطلاب الباحثين عن المنح الدراسية</div>
+        <h1>كل ما تحتاجه لملفك<br><em>في مكان واحد</em></h1>
+        <p>أدوات مجانية وسريعة تساعدك على تجهيز وثائقك وسيرتك الذاتية وترجمة مستنداتك — بدون سيرفر، خصوصيتك محفوظة.</p>
+        <div class="hero-btns">
+          <a href="#tools" class="btn-primary">🛠️ اكتشف الأدوات</a>
+          <a href="#tips" class="btn-outline">💡 نصائح المنح</a>
+          <button class="download-site-btn" onclick="toggleInstallGuide()">📥 تثبيت الموقع على هاتفك</button>
+        </div>
+
+        <div class="install-guide" id="install-guide">
+          <h4>📱 كيفية إضافة الموقع إلى شاشة هاتفك الرئيسية</h4>
+          <ol>
+            <li><strong>Android (Chrome):</strong> اضغط على زر القائمة (⋮) ثم اختر "إضافة إلى الشاشة الرئيسية"</li>
+            <li><strong>iPhone (Safari):</strong> اضغط على زر المشاركة (□↑) ثم اختر "إضافة إلى الشاشة الرئيسية"</li>
+            <li><strong>Android (Firefox):</strong> اضغط على زر القائمة (⋮) ثم اختر "تثبيت"</li>
+            <li>سيظهر الموقع كتطبيق على هاتفك للوصول السريع</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- STATS -->
+    <div class="stats-bar">
+      <div class="stats-inner">
+        <div class="stat-item">
+          <div class="stat-num">8+</div>
+          <div class="stat-label">أداة مجانية</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">100%</div>
+          <div class="stat-label">في المتصفح — بدون رفع</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">0 €</div>
+          <div class="stat-label">تكلفة الاستخدام</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">∞</div>
+          <div class="stat-label">ملفات غير محدودة</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOOLS SECTION -->
+    <section class="section" id="tools">
+      <div class="container">
+        <div class="tools-header">
+          <div class="section-label">الأدوات</div>
+          <h2 class="section-title">أدوات تجهيز ملف المنحة</h2>
+          <p class="section-desc">كل ما تحتاجه لتجهيز وثائقك بشكل احترافي — جميعها تعمل داخل المتصفح مباشرة.</p>
+        </div>
+
+        <div class="tools-grid">
+          <div class="tool-card" onclick="openTool('pdf-to-jpg')">
+            <div class="tool-icon">🖼️</div>
+            <h3>PDF إلى JPEG</h3>
+            <p>حوّل صفحات PDF إلى صور عالية الجودة.</p>
+            <span class="tool-tag">PDF → JPEG</span>
+          </div>
+
+          <div class="tool-card" onclick="openTool('jpg-to-pdf')">
+            <div class="tool-icon">📄</div>
+            <h3>JPEG إلى PDF</h3>
+            <p>حوّل صورك إلى ملف PDF جاهز للإرسال.</p>
+            <span class="tool-tag">JPEG → PDF</span>
+          </div>
+
+          <div class="tool-card" onclick="openTool('merge-pdf')">
+            <div class="tool-icon">📎</div>
+            <h3>دمج PDF</h3>
+            <p>اجمع عدة ملفات PDF في ملف واحد.</p>
+            <span class="tool-tag">دمج PDF</span>
+          </div>
+
+          <div class="tool-card" onclick="openTool('compress-pdf')">
+            <div class="tool-icon">⚡</div>
+            <h3>ضغط PDF</h3>
+            <p>قلّص حجم PDF بشكل كبير دون فقدان الجودة.</p>
+            <span class="tool-tag">ضغط PDF</span>
+          </div>
+
+          <div class="tool-card" onclick="openTool('cv-builder')">
+            <div class="tool-icon">📋</div>
+            <h3>السيرة الذاتية</h3>
+            <p>أنشئ CV احترافي مع صورة، جاهز للتحميل PDF/JPEG.</p>
+            <span class="tool-tag">CV بالعربية</span>
+          </div>
+
+          <div class="tool-card" onclick="openTool('translate')">
+            <div class="tool-icon">🌐</div>
+            <h3>ترجمة نصوص</h3>
+            <p>ترجمة احترافية مع ترويسة وتوقيع سلام سبيس.</p>
+            <span class="tool-tag">ترجمة رسمية</span>
+          </div>
+
+          <div class="tool-card" onclick="openTool('pdf-translate')">
+            <div class="tool-icon">📑</div>
+            <h3>ترجمة PDF</h3>
+            <p>ارفع PDF واحصل على ترجمة نصه إلى العربية.</p>
+            <span class="tool-tag">PDF → ترجمة</span>
+          </div>
+
+          <div class="tool-card" onclick="openTool('arabic-test')">
+            <div class="tool-icon">📝</div>
+            <h3>اختبار مستوى العربية</h3>
+            <p>20 سؤال، 10 دقائق، شهادة معتمدة.</p>
+            <span class="tool-tag">اختبار لغة</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT SECTION -->
+    <section class="section section-alt" id="about-section">
+      <div class="container">
+        <div class="about-grid">
+          <div class="about-text">
+            <div class="section-label">لماذا سلام سبيس؟</div>
+            <h2 class="section-title">صُمِّم خصيصاً للطالب العربي الباحث عن منحة</h2>
+            <p style="color:var(--muted);font-size:1rem;margin-bottom:20px;">نعلم أن رحلة البحث عن منحة دراسية تتطلب الكثير من الوقت والجهد في تجهيز الوثائق. سلام سبيس يجمع لك كل الأدوات في مكان واحد، مجاناً وبدون قيود.</p>
+            <ul class="about-features">
+              <li>
+                <span class="feat-icon">🛡️</span>
+                <span class="feat-text">خصوصية تامة <small>جميع الأدوات تعمل 100% في متصفحك — ملفاتك لا تغادر جهازك</small></span>
+              </li>
+              <li>
+                <span class="feat-icon">🚀</span>
+                <span class="feat-text">بدون تسجيل <small>لا حاجة لإنشاء حساب، ابدأ فوراً وبسهولة</small></span>
+              </li>
+              <li>
+                <span class="feat-icon">🎯</span>
+                <span class="feat-text">مصمم للطلاب <small>واجهة عربية كاملة، مبسطة ومخصصة لاحتياجات الباحثين عن المنح</small></span>
+              </li>
+              <li>
+                <span class="feat-icon">📊</span>
+                <span class="feat-text">متوافق مع المعايير <small>مصمم وفق متطلبات Google AdSense والخصوصية الرقمية</small></span>
+              </li>
+            </ul>
+          </div>
+          <div class="about-visual">
+            <div class="decoration">📚</div>
+            <div class="big-stamp">سلام سبيس<br>SalamSpace<br>✓</div>
+            <p>منصتك الموثوقة لتجهيز ملف منحتك الدراسية باحترافية</p>
+            <div style="margin-top:16px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;position:relative;z-index:1;">
+              <span style="background:rgba(255,255,255,0.15);padding:4px 14px;border-radius:20px;font-size:0.75rem;">✓ مجاني 100%</span>
+              <span style="background:rgba(255,255,255,0.15);padding:4px 14px;border-radius:20px;font-size:0.75rem;">✓ بدون إعلانات مزعجة</span>
+              <span style="background:rgba(255,255,255,0.15);padding:4px 14px;border-radius:20px;font-size:0.75rem;">✓ دعم فني</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TIPS SECTION -->
+    <section class="section" id="tips">
+      <div class="container">
+        <div class="section-label">نصائح ذهبية</div>
+        <h2 class="section-title">كيف تزيد فرصك في الحصول على المنحة؟</h2>
+        <p class="section-desc" style="max-width:600px;">نصائح عملية من خبراء تقديم الملفات الدراسية الدولية لتعزيز فرصك في القبول.</p>
+        <div class="tips-grid">
+          <div class="tip-card">
+            <div class="tip-header">
+              <span class="tip-num">01</span>
+              <span class="tip-icon">📋</span>
+            </div>
+            <div class="tip-title">اقرأ الشروط بعناية</div>
+            <div class="tip-text">تأكد من استيفاء جميع متطلبات المنحة قبل الشروع في تجهيز الملف. راجع كل التفاصيل الدقيقة.</div>
+            <span class="tip-tag">#تحضير</span>
+          </div>
+          <div class="tip-card">
+            <div class="tip-header">
+              <span class="tip-num">02</span>
+              <span class="tip-icon">📸</span>
+            </div>
+            <div class="tip-title">وثائق واضحة ومقروءة</div>
+            <div class="tip-text">تأكد أن جميع وثائقك ذات دقة عالية وغير مشوّهة. استخدم أداة تحويل PDF إلى صور للحصول على جودة ممتازة.</div>
+            <span class="tip-tag">#جودة</span>
+          </div>
+          <div class="tip-card">
+            <div class="tip-header">
+              <span class="tip-num">03</span>
+              <span class="tip-icon">✍️</span>
+            </div>
+            <div class="tip-title">خطاب دوافع قوي</div>
+            <div class="tip-text">اكتب رسالة دوافع شخصية ومقنعة تبيّن سبب استحقاقك للمنحة. ركّز على إنجازاتك وأهدافك المستقبلية.</div>
+            <span class="tip-tag">#إقناع</span>
+          </div>
+          <div class="tip-card">
+            <div class="tip-header">
+              <span class="tip-num">04</span>
+              <span class="tip-icon">🌐</span>
+            </div>
+            <div class="tip-title">ترجمات رسمية</div>
+            <div class="tip-text">استخدم أداة الترجمة لدينا للحصول على ترجمة احترافية مع ترويسة موثّقة من سلام سبيس.</div>
+            <span class="tip-tag">#ترجمة</span>
+          </div>
+          <div class="tip-card">
+            <div class="tip-header">
+              <span class="tip-num">05</span>
+              <span class="tip-icon">📄</span>
+            </div>
+            <div class="tip-title">السيرة الذاتية بالعربية</div>
+            <div class="tip-text">أنشئ CV احترافياً مع صورتك الشخصية باستخدام أداة السيرة الذاتية. عرض واضح ومنظم.</div>
+            <span class="tip-tag">#CV</span>
+          </div>
+          <div class="tip-card">
+            <div class="tip-header">
+              <span class="tip-num">06</span>
+              <span class="tip-icon">⏰</span>
+            </div>
+            <div class="tip-title">ابعث في الوقت المناسب</div>
+            <div class="tip-text">لا تنتظر حتى آخر لحظة، التقدم المبكر يزيد فرصك في القبول ويترك انطباعاً إيجابياً.</div>
+            <span class="tip-tag">#تنظيم</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section section-alt" id="faq">
+      <div class="container" style="text-align:center; margin-bottom:30px;">
+        <div class="section-label">الأسئلة الشائعة</div>
+        <h2 class="section-title">ما الذي تريد معرفته؟</h2>
+        <p class="section-desc" style="max-width:500px;margin:0 auto;">إجابات على أكثر الأسئلة التي تطرحها عن خدماتنا وأدواتنا.</p>
+      </div>
+      <div class="faq-wrapper">
+        <div class="faq-item-pro" onclick="toggleFaqPro(this)">
+          <div class="faq-q-pro">
+            <span class="faq-icon">❓</span>
+            <span>هل الأدوات مجانية بالكامل؟</span>
+            <span class="faq-arrow">▼</span>
+          </div>
+          <div class="faq-a-pro"><p>نعم، جميع أدوات سلام سبيس مجانية 100% وبدون قيود على عدد الملفات أو الاستخدام. لا توجد أي رسوم خفية.</p></div>
+        </div>
+        <div class="faq-item-pro" onclick="toggleFaqPro(this)">
+          <div class="faq-q-pro">
+            <span class="faq-icon">🔒</span>
+            <span>هل ملفاتي تُحفظ على الإنترنت؟</span>
+            <span class="faq-arrow">▼</span>
+          </div>
+          <div class="faq-a-pro"><p>لا، جميع عمليات المعالجة تتم مباشرة في متصفحك. ملفاتك لا تُرسل إلى أي خادم ولا تُحفظ في أي مكان. خصوصيتك مضمونة.</p></div>
+        </div>
+        <div class="faq-item-pro" onclick="toggleFaqPro(this)">
+          <div class="faq-q-pro">
+            <span class="faq-icon">📄</span>
+            <span>ما الوثائق التي يمكنني ترجمتها؟</span>
+            <span class="faq-arrow">▼</span>
+          </div>
+          <div class="faq-a-pro"><p>يمكنك ترجمة أي وثيقة نصية: شهادات ميلاد، كشف درجات، عقود، شهادات عمل، رسائل تحفيز، وغيرها. فقط الصق النص وستحصل على الترجمة مع ترويسة سلام سبيس.</p></div>
+        </div>
+        <div class="faq-item-pro" onclick="toggleFaqPro(this)">
+          <div class="faq-q-pro">
+            <span class="faq-icon">📋</span>
+            <span>هل السيرة الذاتية المنشأة مقبولة في الجامعات؟</span>
+            <span class="faq-arrow">▼</span>
+          </div>
+          <div class="faq-a-pro"><p>نعم، السيرة الذاتية المُنشأة احترافية بالمعايير الدولية مع صورة شخصية، وهي مقبولة في أغلب الجامعات والمؤسسات الدولية. يمكنك تعديلها حسب متطلبات كل جهة.</p></div>
+        </div>
+        <div class="faq-item-pro" onclick="toggleFaqPro(this)">
+          <div class="faq-q-pro">
+            <span class="faq-icon">🌐</span>
+            <span>ما هي المتصفحات المدعومة؟</span>
+            <span class="faq-arrow">▼</span>
+          </div>
+          <div class="faq-a-pro"><p>يعمل الموقع على جميع المتصفحات الحديثة: Chrome، Firefox، Edge، Safari — على الحاسوب والهاتف. ننصح باستخدام Chrome للحصول على أفضل تجربة.</p></div>
+        </div>
+        <div class="faq-item-pro" onclick="toggleFaqPro(this)">
+          <div class="faq-q-pro">
+            <span class="faq-icon">💰</span>
+            <span>كيف يُموَّل الموقع إذا كان مجانياً؟</span>
+            <span class="faq-arrow">▼</span>
+          </div>
+          <div class="faq-a-pro"><p>الموقع ممول عبر الإعلانات المعروضة من Google AdSense. نحن نضمن أن الإعلانات لا تؤثر على أداء الأدوات أو خصوصيتك. نختار إعلانات غير مزعجة.</p></div>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- end home-page -->
+
+  <!-- ===== ABOUT PAGE ===== -->
+  <div id="about-page" class="page-section">
+    <section class="section">
+      <div class="container">
+        <div class="policy-content">
+          <h1>عن سلام سبيس</h1>
+          <p>سلام سبيس هي منصة رقمية مجانية تهدف إلى مساعدة الطلاب العرب الباحثين عن المنح الدراسية في إعداد ملفاتهم بشكل احترافي وسريع.</p>
+          <h2>مهمتنا</h2>
+          <p>نؤمن بأن كل طالب يستحق أدوات احترافية بدون عوائق مالية. لذلك قررنا تطوير مجموعة من الأدوات المجانية التي تعمل مباشرة في المتصفح دون الحاجة إلى تسجيل أو دفع.</p>
+          <h2>خصوصيتك أولاً</h2>
+          <p>جميع معالجات الملفات تتم حصرياً داخل متصفحك. لا ترسل ملفاتك إلى أي خادم خارجي، ولا نحتفظ بأي بيانات شخصية. خصوصيتك مُصانة بالكامل.</p>
+          <h2>التقنيات المستخدمة</h2>
+          <p>يستخدم الموقع أحدث تقنيات الويب: PDF.js، pdf-lib، jsPDF، html2canvas.</p>
+          <div style="margin-top:20px;">
+            <button class="btn-action" onclick="showPage('home')">← العودة للرئيسية</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ===== PRIVACY PAGE ===== -->
+  <div id="privacy-page" class="page-section">
+    <section class="section">
+      <div class="container">
+        <div class="policy-content">
+          <h1>سياسة الخصوصية</h1>
+          <p><strong>آخر تحديث:</strong> يونيو 2026</p>
+          <h2>المعلومات التي نجمعها</h2>
+          <p>لا نجمع أي معلومات شخصية. جميع معالجات الملفات تتم محلياً في متصفحك ولا تُرسل إلى خوادمنا.</p>
+          <h2>ملفات تعريف الارتباط (Cookies)</h2>
+          <p>قد يستخدم Google AdSense ملفات تعريف الارتباط لعرض إعلانات ذات صلة. يمكنك تعطيل هذا من إعدادات متصفحك.</p>
+          <h2>الإعلانات</h2>
+          <p>يستخدم موقعنا Google AdSense لعرض إعلانات. لمزيد من المعلومات حول كيفية استخدام Google للبيانات، راجع <a href="https://policies.google.com/privacy" target="_blank">سياسة خصوصية Google</a>.</p>
+          <h2>التعديلات</h2>
+          <p>قد نحدّث هذه السياسة في أي وقت. استمرارك في استخدام الموقع يعني موافقتك على الشروط المحدّثة.</p>
+          <div style="margin-top:20px;">
+            <button class="btn-action" onclick="showPage('home')">← العودة للرئيسية</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ===== CONTACT PAGE ===== -->
+  <div id="contact-page" class="page-section">
+    <section class="section">
+      <div class="container">
+        <div class="policy-content">
+          <h1>تواصل معنا</h1>
+          <p>يمكنك التواصل مع فريق سلام سبيس عبر القنوات التالية:</p>
+          <div class="contact-methods">
+            <a href="mailto:contact@salamspace.com" class="contact-method">
+              <span class="icon">📧</span>
+              <div>
+                <div>Gmail</div>
+                <div class="label">contact@salamspace.com</div>
+              </div>
+            </a>
+            <a href="#" class="contact-method" onclick="alert('رابط صفحة الفيسبوك: https://facebook.com/salamspace')">
+              <span class="icon">📘</span>
+              <div>
+                <div>Facebook</div>
+                <div class="label">SalamSpace</div>
+              </div>
+            </a>
+            <a href="#" class="contact-method" onclick="alert('رابط قناة التلغرام: https://t.me/salamspace')">
+              <span class="icon">✈️</span>
+              <div>
+                <div>Telegram</div>
+                <div class="label">@SalamSpace</div>
+              </div>
+            </a>
+            <a href="#" class="contact-method" onclick="alert('رابط واتساب: https://wa.me/213XXXXXXXXX')">
+              <span class="icon">💬</span>
+              <div>
+                <div>WhatsApp</div>
+                <div class="label">+213 XXX XXX XXX</div>
+              </div>
+            </a>
+          </div>
+          <p style="margin-top:16px; font-size:0.9rem; color:var(--muted);">
+            أو مراسلتنا عبر البريد الإلكتروني: <strong>contact@salamspace.com</strong>
+          </p>
+          <div style="margin-top:20px;">
+            <button class="btn-action" onclick="showPage('home')">← العودة للرئيسية</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ===== FOOTER ===== -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="logo-text-footer">🕌 سلام سبيس — SalamSpace</div>
+          <p>منصة مجانية لتجهيز ملف منحتك الدراسية. أدوات PDF، سيرة ذاتية، ترجمة وثائق — كل ذلك في متصفحك دون أي رفع لملفاتك.</p>
+        </div>
+        <div class="footer-col">
+          <h4>الأدوات</h4>
+          <a href="#" onclick="openTool('pdf-to-jpg')">PDF إلى JPEG</a>
+          <a href="#" onclick="openTool('jpg-to-pdf')">JPEG إلى PDF</a>
+          <a href="#" onclick="openTool('merge-pdf')">دمج PDF</a>
+          <a href="#" onclick="openTool('compress-pdf')">ضغط PDF</a>
+        </div>
+        <div class="footer-col">
+          <h4>المزيد</h4>
+          <a href="#" onclick="openTool('cv-builder')">إنشاء CV</a>
+          <a href="#" onclick="openTool('translate')">ترجمة نصوص</a>
+          <a href="#" onclick="openTool('pdf-translate')">ترجمة PDF</a>
+          <a href="#" onclick="openTool('arabic-test')">اختبار العربية</a>
+        </div>
+        <div class="footer-col">
+          <h4>الموقع</h4>
+          <a href="#" onclick="showPage('about')">عن الموقع</a>
+          <a href="#" onclick="showPage('privacy')">سياسة الخصوصية</a>
+          <a href="#" onclick="showPage('contact')">تواصل معنا</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 سلام سبيس — جميع الحقوق محفوظة</span>
+        <span>
+          <a href="#" onclick="showPage('privacy')">الخصوصية</a> |
+          <a href="#" onclick="showPage('contact')">تواصل</a>
+        </span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===== MODALS ===== -->
+
+  <!-- Tool: PDF → JPEG -->
+  <div class="modal-overlay" id="modal-pdf-to-jpg">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>🖼️ تحويل PDF إلى صور JPEG</h2>
+        <button class="modal-close" onclick="closeTool('pdf-to-jpg')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="upload-zone" onclick="document.getElementById('file-pdf2jpg').click()" ondragover="ev.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="handleDrop(event,'pdf2jpg')">
+          <div class="up-icon">📂</div>
+          <h3>اسحب ملف PDF هنا أو اضغط للاختيار</h3>
+          <p>سيتم تحويل كل صفحة إلى صورة JPEG</p>
+          <input type="file" id="file-pdf2jpg" accept=".pdf" onchange="loadPdf2Jpg(this)">
+        </div>
+        <div class="form-group" style="margin-top:12px;">
+          <label>جودة الصورة: <span id="quality-label">90</span>%</label>
+          <input type="range" id="quality-range" min="50" max="100" value="90" oninput="document.getElementById('quality-label').textContent=this.value">
+        </div>
+        <div class="spinner" id="spin-pdf2jpg"></div>
+        <div id="thumbs-pdf2jpg" class="thumb-grid"></div>
+        <div class="result-box" id="result-pdf2jpg">
+          <div class="alert alert-success">✅ تم تحويل الصفحات بنجاح!</div>
+          <div id="download-links-pdf2jpg" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tool: JPEG → PDF -->
+  <div class="modal-overlay" id="modal-jpg-to-pdf">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>📄 تحويل صور JPEG إلى PDF</h2>
+        <button class="modal-close" onclick="closeTool('jpg-to-pdf')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="upload-zone" onclick="document.getElementById('file-jpg2pdf').click()" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="handleDrop(event,'jpg2pdf')">
+          <div class="up-icon">🗂️</div>
+          <h3>اختر صوراً JPEG/PNG للتحويل</h3>
+          <p>يمكنك اختيار عدة صور دفعة واحدة</p>
+          <input type="file" id="file-jpg2pdf" accept="image/*" multiple onchange="previewJpg2Pdf(this)">
+        </div>
+        <div id="img-list-jpg2pdf" class="thumb-grid"></div>
+        <div id="imgs-count" style="font-size:0.82rem;color:var(--muted);margin-top:6px;"></div>
+        <div class="spinner" id="spin-jpg2pdf"></div>
+        <div class="result-box" id="result-jpg2pdf">
+          <div class="alert alert-success">✅ تم إنشاء ملف PDF بنجاح!</div>
+          <a id="dl-jpg2pdf" class="btn-action" style="margin-top:8px;">⬇️ تحميل PDF</a>
+        </div>
+        <div style="margin-top:12px;">
+          <button class="btn-action clay" onclick="convertJpg2Pdf()">▶ تحويل إلى PDF</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tool: Merge PDF -->
+  <div class="modal-overlay" id="modal-merge-pdf">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>📎 دمج ملفات PDF</h2>
+        <button class="modal-close" onclick="closeTool('merge-pdf')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-info">أضف ملفات PDF بالترتيب الذي تريد دمجها به.</div>
+        <div class="upload-zone" style="margin-top:10px" onclick="document.getElementById('file-merge').click()">
+          <div class="up-icon">➕</div>
+          <h3>اضغط لإضافة ملفات PDF</h3>
+          <p>يمكنك اختيار عدة ملفات</p>
+          <input type="file" id="file-merge" accept=".pdf" multiple onchange="addMergeFiles(this)">
+        </div>
+        <div id="merge-file-list" class="file-list"></div>
+        <div class="spinner" id="spin-merge"></div>
+        <div class="result-box" id="result-merge">
+          <div class="alert alert-success">✅ تم دمج الملفات بنجاح!</div>
+          <a id="dl-merge" class="btn-action" style="margin-top:8px;">⬇️ تحميل الملف المدمج</a>
+        </div>
+        <div style="margin-top:12px;">
+          <button class="btn-action clay" onclick="mergePdfs()">🔗 دمج الملفات</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tool: Compress PDF (FIXED) -->
+  <div class="modal-overlay" id="modal-compress-pdf">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>⚡ تقليص حجم PDF</h2>
+        <button class="modal-close" onclick="closeTool('compress-pdf')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-info">سيتم ضغط الملف باستخدام تقنية إعادة حفظ PDF مع تحسين الجودة.</div>
+        <div class="upload-zone" onclick="document.getElementById('file-compress').click()">
+          <div class="up-icon">📦</div>
+          <h3>اختر ملف PDF لتقليص حجمه</h3>
+          <input type="file" id="file-compress" accept=".pdf" onchange="loadCompress(this)">
+        </div>
+        <div id="compress-info" style="display:none;margin-top:12px;">
+          <div class="file-item">
+            <span class="file-item-name" id="compress-filename">–</span>
+            <span class="file-item-size" id="compress-filesize">–</span>
+          </div>
+          <div class="form-group" style="margin-top:10px;">
+            <label>مستوى الضغط: <span id="compress-label">متوسط</span></label>
+            <input type="range" id="compress-level" min="1" max="3" value="2" step="1" oninput="updateCompressLabel(this.value)">
+            <small style="color:var(--muted);font-size:0.75rem">1 = خفيف | 2 = متوسط | 3 = قوي</small>
+          </div>
+        </div>
+        <div class="spinner" id="spin-compress"></div>
+        <div class="result-box" id="result-compress">
+          <div class="alert alert-success" id="compress-result-msg">✅ تم ضغط الملف!</div>
+          <a id="dl-compress" class="btn-action" style="margin-top:8px;">⬇️ تحميل الملف المضغوط</a>
+        </div>
+        <div style="margin-top:12px;">
+          <button class="btn-action clay" onclick="compressPdf()" id="btn-compress" style="display:none;">⚡ ضغط الملف</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tool: CV Builder -->
+  <div class="modal-overlay" id="modal-cv-builder">
+    <div class="modal" style="max-width:800px">
+      <div class="modal-header">
+        <h2>📋 إنشاء السيرة الذاتية</h2>
+        <button class="modal-close" onclick="closeTool('cv-builder')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="tabs">
+          <button class="tab-btn active" onclick="switchTab('cv-info','cv')">المعلومات</button>
+          <button class="tab-btn" onclick="switchTab('cv-edu','cv')">التعليم والخبرة</button>
+          <button class="tab-btn" onclick="switchTab('cv-preview-tab','cv')">معاينة</button>
+        </div>
+
+        <div class="tab-panel active" id="cv-info">
+          <div class="form-row">
+            <div class="form-group">
+              <label>الاسم الكامل *</label>
+              <input type="text" id="cv-name" placeholder="أحمد محمد الحسيني" oninput="updateCV()">
+            </div>
+            <div class="form-group">
+              <label>التخصص</label>
+              <input type="text" id="cv-role" placeholder="طالب هندسة مدنية" oninput="updateCV()">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>البريد الإلكتروني</label>
+              <input type="email" id="cv-email" placeholder="email@example.com" oninput="updateCV()">
+            </div>
+            <div class="form-group">
+              <label>رقم الهاتف</label>
+              <input type="tel" id="cv-phone" placeholder="+213 XXX XXX XXX" oninput="updateCV()">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>المدينة / البلد</label>
+              <input type="text" id="cv-location" placeholder="الجزائر العاصمة، الجزائر" oninput="updateCV()">
+            </div>
+            <div class="form-group">
+              <label>LinkedIn</label>
+              <input type="text" id="cv-web" placeholder="linkedin.com/in/yourname" oninput="updateCV()">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>الصورة الشخصية</label>
+            <input type="file" id="cv-photo" accept="image/*" onchange="loadCVPhoto(this)" style="display:block;width:auto;padding:6px;">
+          </div>
+          <div class="form-group">
+            <label>ملخص شخصي</label>
+            <textarea id="cv-summary" placeholder="طالب جاد ومتحمس..." oninput="updateCV()"></textarea>
+          </div>
+        </div>
+
+        <div class="tab-panel" id="cv-edu">
+          <div class="form-group">
+            <label>المسار التعليمي</label>
+            <textarea id="cv-education" rows="4" placeholder="ليسانس في الهندسة المدنية — جامعة الجزائر، 2022" oninput="updateCV()"></textarea>
+          </div>
+          <div class="form-group">
+            <label>الخبرات والتدريب</label>
+            <textarea id="cv-experience" rows="4" placeholder="تدريب صيفي — شركة البناء الوطنية، 2023" oninput="updateCV()"></textarea>
+          </div>
+          <div class="form-group">
+            <label>المهارات</label>
+            <textarea id="cv-skills" rows="3" placeholder="AutoCAD، Python، المايكروسوفت أوفيس" oninput="updateCV()"></textarea>
+          </div>
+          <div class="form-group">
+            <label>اللغات</label>
+            <input type="text" id="cv-languages" placeholder="العربية (أصلية)، الفرنسية (ممتاز)" oninput="updateCV()">
+          </div>
+          <div class="form-group">
+            <label>المشاريع والإنجازات</label>
+            <textarea id="cv-projects" rows="3" placeholder="مشروع تخرج: تصميم جسر بمحطة قياس ذكية" oninput="updateCV()"></textarea>
+          </div>
+        </div>
+
+        <div class="tab-panel" id="cv-preview-tab">
+          <div id="cv-preview">
+            <div class="cv-header-bar">
+              <div class="cv-photo-circle" id="cv-photo-preview">👤</div>
+              <div>
+                <div class="cv-name" id="cv-p-name">الاسم الكامل</div>
+                <div class="cv-title-role" id="cv-p-role">التخصص</div>
+                <div class="cv-contacts">
+                  <span id="cv-p-email">📧 البريد</span>
+                  <span id="cv-p-phone">📞 الهاتف</span>
+                  <span id="cv-p-location">📍 الموقع</span>
+                </div>
+              </div>
+            </div>
+            <div class="cv-body">
+              <div class="cv-section"><div class="cv-section-title">الملخص الشخصي</div><div class="cv-section-body" id="cv-p-summary">–</div></div>
+              <div class="cv-section"><div class="cv-section-title">التعليم</div><div class="cv-section-body" id="cv-p-education">–</div></div>
+              <div class="cv-section"><div class="cv-section-title">الخبرات</div><div class="cv-section-body" id="cv-p-experience">–</div></div>
+              <div class="cv-section"><div class="cv-section-title">المهارات واللغات</div><div class="cv-section-body" id="cv-p-skills">–</div></div>
+              <div class="cv-section"><div class="cv-section-title">المشاريع</div><div class="cv-section-body" id="cv-p-projects">–</div></div>
+            </div>
+            <div class="cv-footer">CV généré par SalamSpace — salam.space</div>
+          </div>
+          <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;">
+            <button class="btn-action clay" onclick="downloadCV('pdf')">⬇️ PDF</button>
+            <button class="btn-action" onclick="downloadCV('jpeg')">🖼️ JPEG</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tool: Text Translation -->
+  <div class="modal-overlay" id="modal-translate">
+    <div class="modal" style="max-width:760px">
+      <div class="modal-header">
+        <h2>🌐 ترجمة النصوص إلى العربية</h2>
+        <button class="modal-close" onclick="closeTool('translate')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>عنوان الوثيقة</label>
+          <input type="text" id="tr-title" placeholder="مثال: شهادة الميلاد">
+        </div>
+        <div class="form-group">
+          <label>اسم صاحب الوثيقة</label>
+          <input type="text" id="tr-owner" placeholder="الاسم الكامل">
+        </div>
+        <div class="form-group">
+          <label>النص المراد ترجمته</label>
+          <textarea id="tr-source" rows="5" placeholder="الصق هنا النص الأصلي للوثيقة..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>اللغة المصدر</label>
+          <select id="tr-lang">
+            <option value="fr">الفرنسية</option>
+            <option value="en">الإنجليزية</option>
+            <option value="es">الإسبانية</option>
+            <option value="de">الألمانية</option>
+            <option value="ar">العربية (تنسيق فقط)</option>
+          </select>
+        </div>
+        <button class="btn-action clay" onclick="doTranslate()">🌐 ترجمة النص</button>
+        <div class="spinner" id="spin-translate"></div>
+
+        <div class="translate-doc" id="translate-result">
+          <div class="translate-doc-header">
+            <div>
+              <div style="font-size:0.7rem;opacity:0.8;margin-bottom:2px;">سلام سبيس — SalamSpace</div>
+              <div style="font-weight:700;font-size:1rem;" id="tr-doc-title">عنوان الوثيقة</div>
+              <div style="font-size:0.75rem;opacity:0.8;" id="tr-doc-date"></div>
+            </div>
+            <div class="translate-doc-stamp">سلام<br>سبيس<br>✓</div>
+          </div>
+          <div class="translate-doc-body">
+            <p style="font-size:0.8rem;color:var(--muted);margin-bottom:12px;">
+              <strong>صاحب الوثيقة:</strong> <span id="tr-doc-owner">–</span> &nbsp;|&nbsp;
+              <strong>تاريخ الترجمة:</strong> <span id="tr-doc-date2"></span>
+            </p>
+            <div class="translated-text" id="tr-translated-text"></div>
+            <div class="warning-note">⚠️ يرجى التأكد من دقة الترجمة ومراجعة المصطلحات المتخصصة.</div>
+            <div class="translate-doc-sig">توقيع المترجم: سلام سبيس — SalamSpace</div>
+          </div>
+          <div class="translate-doc-footer">
+            <span>هذه الترجمة صادرة عن منصة سلام سبيس | <span class="domain">salam.space</span></span>
+            <span id="tr-footer-title"></span>
+          </div>
+        </div>
+
+        <div id="tr-actions" style="display:none;margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn-action" onclick="downloadTranslation('pdf')">⬇️ PDF</button>
+          <button class="btn-action clay" onclick="downloadTranslation('jpeg')">🖼️ JPEG</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tool: PDF Translation -->
+  <div class="modal-overlay" id="modal-pdf-translate">
+    <div class="modal" style="max-width:760px">
+      <div class="modal-header">
+        <h2>📑 ترجمة ملفات PDF إلى العربية</h2>
+        <button class="modal-close" onclick="closeTool('pdf-translate')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-info">ارفع ملف PDF، سيتم استخراج النص وترجمته إلى العربية باستخدام MyMemory.</div>
+        <div class="upload-zone" onclick="document.getElementById('file-pdf-translate').click()" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="handlePdfTranslateDrop(event)">
+          <div class="up-icon">📂</div>
+          <h3>اسحب ملف PDF هنا</h3>
+          <input type="file" id="file-pdf-translate" accept=".pdf" onchange="loadPdfForTranslation(this)">
+        </div>
+        <div id="pdf-translate-info" style="display:none;margin-top:12px;">
+          <div class="file-item">
+            <span class="file-item-name" id="pdf-translate-filename">–</span>
+            <span class="file-item-size" id="pdf-translate-filesize">–</span>
+          </div>
+          <div class="form-group" style="margin-top:10px;">
+            <label>اللغة المصدر</label>
+            <select id="pdf-tr-lang">
+              <option value="fr">الفرنسية</option>
+              <option value="en">الإنجليزية</option>
+              <option value="es">الإسبانية</option>
+              <option value="de">الألمانية</option>
+            </select>
+          </div>
+          <button class="btn-action clay" onclick="translatePdfText()">🌐 ترجمة</button>
+        </div>
+        <div class="spinner" id="spin-pdf-translate"></div>
+        <div id="pdf-translation-result" class="translate-doc">
+          <div class="translate-doc-header">
+            <div>
+              <div style="font-size:0.7rem;opacity:0.8;">سلام سبيس — SalamSpace</div>
+              <div style="font-weight:700;font-size:1rem;" id="pdf-tr-doc-title">ترجمة ملف PDF</div>
+              <div style="font-size:0.75rem;opacity:0.8;" id="pdf-tr-doc-date"></div>
+            </div>
+            <div class="translate-doc-stamp">سلام<br>سبيس<br>✓</div>
+          </div>
+          <div class="translate-doc-body">
+            <div class="translated-text" id="pdf-tr-text"></div>
+            <div class="warning-note">⚠️ قد تحتوي الترجمة الآلية على أخطاء، يرجى المراجعة.</div>
+            <div class="translate-doc-sig">توقيع المترجم: سلام سبيس — SalamSpace</div>
+          </div>
+          <div class="translate-doc-footer">
+            <span>منصة سلام سبيس | <span class="domain">salam.space</span></span>
+          </div>
+        </div>
+        <div id="pdf-tr-actions" style="display:none;margin-top:14px;gap:10px;flex-wrap:wrap;">
+          <button class="btn-action" onclick="downloadTranslation('pdf', true)">⬇️ PDF</button>
+          <button class="btn-action clay" onclick="downloadTranslation('jpeg', true)">🖼️ JPEG</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tool: Arabic Test -->
+  <div class="modal-overlay" id="modal-arabic-test">
+    <div class="modal" style="max-width:750px">
+      <div class="modal-header">
+        <h2>📝 اختبار مستوى اللغة العربية</h2>
+        <button class="modal-close" onclick="closeTool('arabic-test')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div id="test-setup">
+          <div class="alert alert-info">
+            <strong>📋 تعليمات الاختبار:</strong>
+            <ul style="margin-top:6px;padding-right:20px;">
+              <li>20 سؤال في قواعد اللغة العربية والإملاء والبلاغة.</li>
+              <li>المدة: <strong>10 دقائق</strong> (يتم إيقاف الاختبار تلقائياً).</li>
+              <li>لا يمكن الخروج من صفحة الاختبار وإلا سيتم إلغاؤه.</li>
+              <li>الأسئلة تتغير في كل محاولة.</li>
+            </ul>
+          </div>
+          <div class="form-group">
+            <label>الاسم الكامل (للشهادة)</label>
+            <input type="text" id="test-name" placeholder="أدخل اسمك">
+          </div>
+          <button class="btn-action clay" onclick="startTest()">🚀 بدء الاختبار</button>
+        </div>
+
+        <div id="test-area" style="display:none;">
+          <div class="test-timer" id="test-timer">⏱️ 10:00</div>
+          <div class="test-progress">
+            <span class="progress-text" id="test-progress-text">السؤال 1 / 20</span>
+            <span id="test-score-display">✅ 0</span>
+          </div>
+          <div id="test-questions"></div>
+          <button class="btn-action clay" onclick="submitTest()" id="submit-test-btn" style="margin-top:16px;">📤 إنهاء الاختبار</button>
+        </div>
+
+        <div id="test-result" style="display:none;">
+          <div id="certificate-container">
+            <div class="certificate" id="certificate">
+              <div class="cert-border"></div>
+              <div class="cert-header">
+                <div class="cert-logo-icon">س</div>
+                <div class="cert-logo-text">
+                  <h3>سلام سبيس</h3>
+                  <span>SalamSpace</span>
+                </div>
+              </div>
+              <h2>شهادة إتمام اختبار مستوى اللغة العربية</h2>
+              <div class="sub">صادرة عن منصة سلام سبيس للتعليم والتدريب</div>
+              <div class="candidate-name" id="cert-name">–</div>
+              <div class="level" id="cert-level">–</div>
+              <div class="score" id="cert-score">–</div>
+              <div class="stamp">صادر عن منصة سلام سبيس — salam.space</div>
+              <div class="cert-id" id="cert-id">الرقم التسلسلي: –</div>
+            </div>
+          </div>
+          <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;">
+            <button class="btn-action" onclick="downloadCertificate('pdf')">⬇️ تحميل PDF</button>
+            <button class="btn-action clay" onclick="downloadCertificate('jpeg')">🖼️ تحميل JPEG</button>
+            <button class="btn-action" style="background:var(--muted);" onclick="resetTest()">🔄 إعادة المحاولة</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SCRIPTS ===== -->
+  <script>
+    // ===== TOGGLE INSTALL GUIDE =====
+    function toggleInstallGuide() {
+      const guide = document.getElementById('install-guide');
+      guide.classList.toggle('show');
+    }
+
+    // ===== PAGE NAVIGATION =====
+    function showPage(page) {
+      document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+      document.getElementById(page + '-page').classList.add('active');
+      window.scrollTo(0, 0);
+    }
+
+    function toggleMobileNav() {
+      document.getElementById('mobileNav').classList.toggle('open');
+    }
+
+    function toggleFaq(el) {
+      el.closest('.faq-item').classList.toggle('open');
+    }
+
+    // ===== FAQ PRO =====
+    function toggleFaqPro(el) {
+      el.classList.toggle('open');
+    }
+
+    // ===== TOOL MODALS =====
+    function openTool(id) {
+      document.getElementById('modal-' + id).classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeTool(id) {
+      document.getElementById('modal-' + id).classList.remove('active');
+      document.body.style.overflow = '';
+    }
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+      overlay.addEventListener('click', function(e) {
+        if (e.target === this) {
+          this.classList.remove('active');
+          document.body.style.overflow = '';
+        }
+      });
+    });
+
+    // ===== UTILS =====
+    function formatSize(bytes) {
+      if (bytes < 1024) return bytes + ' B';
+      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+      return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+    }
+
+    // ===== TOOL 1: PDF → JPEG =====
+    async function loadPdf2Jpg(input) {
+      if (!input.files[0]) return;
+      const file = input.files[0];
+      const spin = document.getElementById('spin-pdf2jpg');
+      const thumbs = document.getElementById('thumbs-pdf2jpg');
+      const result = document.getElementById('result-pdf2jpg');
+      const dlLinks = document.getElementById('download-links-pdf2jpg');
+
+      spin.classList.add('show');
+      thumbs.innerHTML = '';
+      result.classList.remove('show');
+      dlLinks.innerHTML = '';
+
+      try {
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        const ab = await file.arrayBuffer();
+        const pdfDoc = await pdfjsLib.getDocument(ab).promise;
+        const quality = parseInt(document.getElementById('quality-range').value) / 100;
+
+        for (let p = 1; p <= pdfDoc.numPages; p++) {
+          const page = await pdfDoc.getPage(p);
+          const vp = page.getViewport({ scale: 2 });
+          const canvas = document.createElement('canvas');
+          canvas.width = vp.width;
+          canvas.height = vp.height;
+          await page.render({ canvasContext: canvas.getContext('2d'), viewport: vp }).promise;
+
+          const thumb = document.createElement('div');
+          thumb.className = 'thumb-item';
+          const img = document.createElement('img');
+          img.src = canvas.toDataURL('image/jpeg', 0.5);
+          thumb.appendChild(img);
+          thumbs.appendChild(thumb);
+
+          const dataUrl = canvas.toDataURL('image/jpeg', quality);
+          const a = document.createElement('a');
+          a.href = dataUrl;
+          a.download = `page-${p}.jpg`;
+          a.className = 'btn-action btn-sm';
+          a.textContent = `⬇️ صفحة ${p}`;
+          dlLinks.appendChild(a);
+        }
+        result.classList.add('show');
+      } catch (err) {
+        thumbs.innerHTML = `<div class="alert alert-error">❌ ${err.message}</div>`;
+      }
+      spin.classList.remove('show');
+    }
+
+    function handleDrop(e, target) {
+      e.preventDefault();
+      e.target.closest('.upload-zone').classList.remove('drag-over');
+      const files = e.dataTransfer.files;
+      if (target === 'pdf2jpg') {
+        const input = document.getElementById('file-pdf2jpg');
+        const dt = new DataTransfer();
+        [...files].filter(f => f.type === 'application/pdf').forEach(f => dt.items.add(f));
+        input.files = dt.files;
+        loadPdf2Jpg(input);
+      } else if (target === 'jpg2pdf') {
+        const input = document.getElementById('file-jpg2pdf');
+        input.files = files;
+        previewJpg2Pdf(input);
+      }
+    }
+
+    // ===== TOOL 2: JPEG → PDF =====
+    let jpgFiles = [];
+
+    function previewJpg2Pdf(input) {
+      jpgFiles = [...input.files];
+      const grid = document.getElementById('img-list-jpg2pdf');
+      const count = document.getElementById('imgs-count');
+      grid.innerHTML = '';
+      jpgFiles.forEach(f => {
+        const reader = new FileReader();
+        reader.onload = e => {
+          const div = document.createElement('div');
+          div.className = 'thumb-item';
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          div.appendChild(img);
+          grid.appendChild(div);
+        };
+        reader.readAsDataURL(f);
+      });
+      count.textContent = `تم اختيار ${jpgFiles.length} صورة`;
+      document.getElementById('result-jpg2pdf').classList.remove('show');
+    }
+
+    async function convertJpg2Pdf() {
+      if (!jpgFiles.length) { alert('يرجى اختيار صور أولاً'); return; }
+      const spin = document.getElementById('spin-jpg2pdf');
+      spin.classList.add('show');
+      try {
+        const { PDFDocument } = PDFLib;
+        const pdfDoc = await PDFDocument.create();
+        for (const file of jpgFiles) {
+          const ab = await file.arrayBuffer();
+          let img = file.type === 'image/png' ? await pdfDoc.embedPng(ab) : await pdfDoc.embedJpg(ab);
+          const page = pdfDoc.addPage([img.width, img.height]);
+          page.drawImage(img, { x: 0, y: 0, width: img.width, height: img.height });
+        }
+        const bytes = await pdfDoc.save();
+        const blob = new Blob([bytes], { type: 'application/pdf' });
+        const url = URL.createObjectURL(blob);
+        document.getElementById('dl-jpg2pdf').href = url;
+        document.getElementById('dl-jpg2pdf').download = 'images-converties.pdf';
+        document.getElementById('result-jpg2pdf').classList.add('show');
+      } catch (err) { alert('خطأ: ' + err.message); }
+      spin.classList.remove('show');
+    }
+
+    // ===== TOOL 3: MERGE PDF =====
+    let mergeFiles = [];
+
+    function addMergeFiles(input) {
+      mergeFiles = [...mergeFiles, ...input.files];
+      renderMergeList();
+      document.getElementById('result-merge').classList.remove('show');
+    }
+
+    function renderMergeList() {
+      const list = document.getElementById('merge-file-list');
+      list.innerHTML = '';
+      mergeFiles.forEach((f, i) => {
+        const item = document.createElement('div');
+        item.className = 'file-item';
+        item.innerHTML = `
+          <div><div class="file-item-name">📄 ${f.name}</div><div class="file-item-size">${formatSize(f.size)}</div></div>
+          <button class="file-remove" onclick="removeMergeFile(${i})">🗑️</button>
+        `;
+        list.appendChild(item);
+      });
+    }
+
+    function removeMergeFile(i) { mergeFiles.splice(i, 1);
+      renderMergeList(); }
+
+    async function mergePdfs() {
+      if (mergeFiles.length < 2) { alert('يرجى إضافة ملفين على الأقل'); return; }
+      const spin = document.getElementById('spin-merge');
+      spin.classList.add('show');
+      try {
+        const { PDFDocument } = PDFLib;
+        const merged = await PDFDocument.create();
+        for (const f of mergeFiles) {
+          const ab = await f.arrayBuffer();
+          const doc = await PDFDocument.load(ab);
+          const pages = await merged.copyPages(doc, doc.getPageIndices());
+          pages.forEach(p => merged.addPage(p));
+        }
+        const bytes = await merged.save();
+        const blob = new Blob([bytes], { type: 'application/pdf' });
+        const url = URL.createObjectURL(blob);
+        document.getElementById('dl-merge').href = url;
+        document.getElementById('dl-merge').download = 'fichier-fusionne.pdf';
+        document.getElementById('result-merge').classList.add('show');
+      } catch (err) { alert('خطأ: ' + err.message); }
+      spin.classList.remove('show');
+    }
+
+    // ===== TOOL 4: COMPRESS PDF (FIXED) =====
+    let compressFile = null;
+
+    function updateCompressLabel(v) {
+      const labels = { '1': 'خفيف', '2': 'متوسط', '3': 'قوي' };
+      document.getElementById('compress-label').textContent = labels[v] || 'متوسط';
+    }
+
+    async function loadCompress(input) {
+      if (!input.files[0]) return;
+      compressFile = input.files[0];
+      document.getElementById('compress-filename').textContent = compressFile.name;
+      document.getElementById('compress-filesize').textContent = formatSize(compressFile.size);
+      document.getElementById('compress-info').style.display = 'block';
+      document.getElementById('btn-compress').style.display = 'inline-flex';
+      document.getElementById('result-compress').classList.remove('show');
+    }
+
+    async function compressPdf() {
+      if (!compressFile) return;
+      const spin = document.getElementById('spin-compress');
+      spin.classList.add('show');
+      const btn = document.getElementById('btn-compress');
+      btn.disabled = true;
+
+      try {
+        const { PDFDocument } = PDFLib;
+        const ab = await compressFile.arrayBuffer();
+        const doc = await PDFDocument.load(ab, { ignoreEncryption: true });
+
+        // Re-save with compression options
+        const saveOptions = {
+          useObjectStreams: true,
+          addDefaultPage: false,
+          objectsPerTick: 50
+        };
+
+        const bytes = await doc.save(saveOptions);
+        const originalSize = compressFile.size;
+        const newSize = bytes.length;
+
+        const blob = new Blob([bytes], { type: 'application/pdf' });
+        const url = URL.createObjectURL(blob);
+        const dl = document.getElementById('dl-compress');
+        dl.href = url;
+        dl.download = 'fichier-compresse.pdf';
+
+        const savedPct = (((originalSize - newSize) / originalSize) * 100).toFixed(0);
+        document.getElementById('compress-result-msg').textContent =
+          `✅ تم الضغط! الحجم الجديد: ${formatSize(newSize)} (وفّرت ${savedPct > 0 ? savedPct : 0}%)`;
+
+        document.getElementById('result-compress').classList.add('show');
+      } catch (err) {
+        alert('خطأ في الضغط: ' + err.message);
+      }
+      spin.classList.remove('show');
+      btn.disabled = false;
+    }
+
+    // ===== TOOL 5: CV BUILDER =====
+    let cvPhotoDataUrl = '';
+
+    function loadCVPhoto(input) {
+      if (!input.files[0]) return;
+      const reader = new FileReader();
+      reader.onload = e => { cvPhotoDataUrl = e.target.result;
+        updateCV(); };
+      reader.readAsDataURL(input.files[0]);
+    }
+
+    function updateCV() {
+      const fields = {
+        'cv-p-name': document.getElementById('cv-name').value || 'الاسم الكامل',
+        'cv-p-role': document.getElementById('cv-role').value || 'التخصص',
+        'cv-p-email': document.getElementById('cv-email').value ? '📧 ' + document.getElementById('cv-email').value : '',
+        'cv-p-phone': document.getElementById('cv-phone').value ? '📞 ' + document.getElementById('cv-phone').value : '',
+        'cv-p-location': document.getElementById('cv-location').value ? '📍 ' + document.getElementById('cv-location').value : '',
+        'cv-p-summary': document.getElementById('cv-summary').value || '–',
+        'cv-p-education': document.getElementById('cv-education').value || '–',
+        'cv-p-experience': document.getElementById('cv-experience').value || '–',
+        'cv-p-skills': (document.getElementById('cv-skills').value || '') + (document.getElementById('cv-languages').value ? '\n' + document
+          .getElementById('cv-languages').value : '') || '–',
+        'cv-p-projects': document.getElementById('cv-projects').value || '–'
+      };
+      Object.entries(fields).forEach(([id, val]) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = val;
+      });
+      const photoEl = document.getElementById('cv-photo-preview');
+      photoEl.innerHTML = cvPhotoDataUrl ? `<img src="${cvPhotoDataUrl}" alt="صورة">` : '👤';
+    }
+
+    async function downloadCV(format) {
+      const btns = document.querySelectorAll('#cv-preview-tab .btn-action');
+      btns.forEach(b => b.disabled = true);
+      try {
+        const element = document.getElementById('cv-preview');
+        const canvas = await html2canvas(element, {
+          scale: 2,
+          useCORS: true,
+          backgroundColor: '#fff'
+        });
+        if (format === 'jpeg') {
+          const link = document.createElement('a');
+          link.download = 'السيرة-الذاتية-سلام-سبيس.jpg';
+          link.href = canvas.toDataURL('image/jpeg', 0.95);
+          link.click();
+        } else {
+          const { jsPDF } = window.jspdf;
+          const pdf = new jsPDF({ orientation: canvas.width > canvas.height ? 'landscape' : 'portrait', unit: 'px',
+            format: [canvas.width / 2, canvas.height / 2] });
+          pdf.addImage(canvas.toDataURL('image/jpeg', 0.9), 'JPEG', 0, 0, canvas.width / 2, canvas.height / 2);
+          pdf.save('السيرة-الذاتية-سلام-سبيس.pdf');
+        }
+      } catch (err) { alert('خطأ: ' + err.message); }
+      btns.forEach(b => b.disabled = false);
+    }
+
+    function switchTab(panelId, group) {
+      const modal = document.getElementById('modal-' + group + '-builder') || document.getElementById('modal-cv-builder');
+      modal.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      modal.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.getElementById(panelId).classList.add('active');
+      event.target.classList.add('active');
+      if (panelId === 'cv-preview-tab') updateCV();
+    }
+
+    // ===== TOOL 6: TRANSLATION =====
+    const MYMEMORY_API = 'https://api.mymemory.translated.net/get';
+    let lastTranslationText = '';
+    let lastTranslationTitle = '';
+
+    function formatTranslationText(text) {
+      return text.split(/\n+/).map(p => p.trim()).filter(p => p).join('\n\n');
+    }
+
+    async function doTranslate() {
+      const source = document.getElementById('tr-source').value.trim();
+      const lang = document.getElementById('tr-lang').value;
+      const title = document.getElementById('tr-title').value || 'وثيقة رسمية';
+      const owner = document.getElementById('tr-owner').value || '–';
+      if (!source) { alert('يرجى إدخال النص'); return; }
+
+      const spin = document.getElementById('spin-translate');
+      spin.classList.add('show');
+      document.getElementById('translate-result').classList.remove('show');
+      document.getElementById('tr-actions').style.display = 'none';
+
+      try {
+        let translatedText = '';
+        if (lang === 'ar') {
+          translatedText = formatTranslationText(source);
+        } else {
+          const chunks = source.match(/.{1,500}/gs) || [source];
+          const translatedChunks = [];
+          for (const chunk of chunks) {
+            const url = `${MYMEMORY_API}?q=${encodeURIComponent(chunk)}&langpair=${lang}|ar`;
+            const res = await fetch(url);
+            const data = await res.json();
+            translatedChunks.push(data.responseStatus === 200 ? data.responseData.translatedText : chunk);
+          }
+          translatedText = formatTranslationText(translatedChunks.join(' '));
+        }
+
+        lastTranslationText = translatedText;
+        lastTranslationTitle = title;
+        const now = new Date();
+        const dateStr = now.toLocaleDateString('ar-DZ', { year: 'numeric', month: 'long', day: 'numeric' });
+
+        document.getElementById('tr-doc-title').textContent = title;
+        document.getElementById('tr-doc-date').textContent = dateStr;
+        document.getElementById('tr-doc-date2').textContent = dateStr;
+        document.getElementById('tr-doc-owner').textContent = owner;
+        document.getElementById('tr-translated-text').textContent = translatedText;
+        document.getElementById('tr-footer-title').textContent = title;
+
+        document.getElementById('translate-result').classList.add('show');
+        document.getElementById('tr-actions').style.display = 'flex';
+      } catch (err) { alert('خطأ: ' + err.message); }
+      spin.classList.remove('show');
+    }
+
+    async function downloadTranslation(format, isPdf = false) {
+      const container = isPdf ? document.getElementById('pdf-translation-result') : document.getElementById(
+      'translate-result');
+      if (!container || !container.classList.contains('show')) { alert('لا توجد ترجمة'); return; }
+      const btns = document.querySelectorAll(isPdf ? '#pdf-tr-actions .btn-action' : '#tr-actions .btn-action');
+      btns.forEach(b => b.disabled = true);
+      try {
+        const canvas = await html2canvas(container, { scale: 2, useCORS: true, backgroundColor: '#fff' });
+        const title = isPdf ? 'ترجمة-PDF' : (lastTranslationTitle || 'ترجمة');
+        if (format === 'jpeg') {
+          const link = document.createElement('a');
+          link.download = `${title}-سلام-سبيس.jpg`;
+          link.href = canvas.toDataURL('image/jpeg', 0.95);
+          link.click();
+        } else {
+          const { jsPDF } = window.jspdf;
+          const pdf = new jsPDF({ orientation: canvas.width > canvas.height ? 'landscape' : 'portrait', unit: 'px',
+            format: [canvas.width / 2, canvas.height / 2] });
+          pdf.addImage(canvas.toDataURL('image/jpeg', 0.9), 'JPEG', 0, 0, canvas.width / 2, canvas.height / 2);
+          pdf.save(`${title}-سلام-سبيس.pdf`);
+        }
+      } catch (err) { alert('خطأ: ' + err.message); }
+      btns.forEach(b => b.disabled = false);
+    }
+
+    // ===== TOOL 7: PDF TRANSLATION =====
+    let pdfTranslateText = '';
+
+    async function loadPdfForTranslation(input) {
+      if (!input.files[0]) return;
+      const file = input.files[0];
+      document.getElementById('pdf-translate-filename').textContent = file.name;
+      document.getElementById('pdf-translate-filesize').textContent = formatSize(file.size);
+      document.getElementById('pdf-translate-info').style.display = 'block';
+      document.getElementById('pdf-translation-result').classList.remove('show');
+      document.getElementById('pdf-tr-actions').style.display = 'none';
+
+      try {
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        const ab = await file.arrayBuffer();
+        const doc = await pdfjsLib.getDocument(ab).promise;
+        let text = '';
+        for (let i = 1; i <= doc.numPages; i++) {
+          const page = await doc.getPage(i);
+          const content = await page.getTextContent();
+          text += content.items.map(item => item.str).join(' ') + '\n\n';
+        }
+        pdfTranslateText = text;
+        if (!text.trim()) throw new Error('لم يتم استخراج نص');
+        document.querySelector('#pdf-translate-info .alert-info')?.remove();
+        const info = document.createElement('div');
+        info.className = 'alert alert-success';
+        info.textContent = `✅ تم استخراج النص (${text.length} حرف)`;
+        document.getElementById('pdf-translate-info').prepend(info);
+      } catch (err) {
+        alert('خطأ: ' + err.message);
+        document.getElementById('pdf-translate-info').style.display = 'none';
+      }
+    }
+
+    function handlePdfTranslateDrop(e) {
+      e.preventDefault();
+      e.target.closest('.upload-zone').classList.remove('drag-over');
+      const files = e.dataTransfer.files;
+      const input = document.getElementById('file-pdf-translate');
+      const dt = new DataTransfer();
+      [...files].filter(f => f.type === 'application/pdf').forEach(f => dt.items.add(f));
+      if (dt.files.length > 0) { input.files = dt.files;
+        loadPdfForTranslation(input); }
+    }
+
+    async function translatePdfText() {
+      const lang = document.getElementById('pdf-tr-lang').value;
+      if (!pdfTranslateText || !pdfTranslateText.trim()) { alert('يرجى تحميل PDF أولاً'); return; }
+      const spin = document.getElementById('spin-pdf-translate');
+      spin.classList.add('show');
+      try {
+        const chunks = pdfTranslateText.match(/.{1,500}/gs) || [pdfTranslateText];
+        const translatedChunks = [];
+        for (const chunk of chunks) {
+          const url = `${MYMEMORY_API}?q=${encodeURIComponent(chunk)}&langpair=${lang}|ar`;
+          const res = await fetch(url);
+          const data = await res.json();
+          translatedChunks.push(data.responseStatus === 200 ? data.responseData.translatedText : chunk);
+        }
+        const translatedText = formatTranslationText(translatedChunks.join(' '));
+        lastTranslationText = translatedText;
+        lastTranslationTitle = 'ترجمة ملف PDF';
+        const now = new Date();
+        document.getElementById('pdf-tr-doc-date').textContent = now.toLocaleDateString('ar-DZ', { year: 'numeric',
+          month: 'long', day: 'numeric' });
+        document.getElementById('pdf-tr-text').textContent = translatedText;
+        document.getElementById('pdf-translation-result').classList.add('show');
+        document.getElementById('pdf-tr-actions').style.display = 'flex';
+      } catch (err) { alert('خطأ: ' + err.message); }
+      spin.classList.remove('show');
+    }
+
+    // ===== TOOL 8: ARABIC TEST =====
+    const questionBank = [
+      { q: 'ما هو إعراب كلمة "الكتاب" في جملة "قرأت الكتاب"؟', options: ['فاعل', 'مفعول به', 'مبتدأ', 'خبر'], correct: 1 },
+      { q: 'أي الجمل التالية صحيحة إملائياً؟', options: ['ذهبت إلى المدرسة', 'ذهبت الي المدرسه', 'ذهبت ألى المدرسه', 'ذهبت إلة المدرسه'],
+        correct: 0 },
+      { q: 'ما هو جمع كلمة "رجل"؟', options: ['رجال', 'رجلون', 'أرجل', 'رجلة'], correct: 0 },
+      { q: 'في جملة "السماء صافية"، ما هو خبر المبتدأ؟', options: ['السماء', 'صافية', 'هي', 'جميلة'], correct: 1 },
+      { q: 'ما هو الفعل في جملة "يكتب الطالب الدرس"؟', options: ['يكتب', 'الطالب', 'الدرس', 'يكتب الطالب'], correct: 0 },
+      { q: 'أي من هذه الكلمات تكتب بهمزة وصل؟', options: ['استمع', 'إستماع', 'أستمع', 'استماع'], correct: 0 },
+      { q: 'ما هو إعراب كلمة "المعلم" في جملة "المعلم مجتهد"؟', options: ['مبتدأ', 'خبر', 'فاعل', 'مفعول به'], correct: 0 },
+      { q: 'ما هو جمع كلمة "طالب"؟', options: ['طلاب', 'طالبون', 'طليبة', 'طالبين'], correct: 0 },
+      { q: 'أي الجمل التالية صحيحة من حيث التوافق بين المبتدأ والخبر؟', options: ['الطلاب مجتهد', 'الطلاب مجتهدون', 'الطالب مجتهدون',
+          'الطالب مجتهدات'
+        ], correct: 1 },
+      { q: 'ما هو نوع الهمزة في كلمة "أحمد"؟', options: ['همزة قطع', 'همزة وصل', 'همزة مد', 'همزة نبرة'], correct: 0 },
+      { q: 'في جملة "إن الله غفور رحيم"، ما هو إعراب "غفور"؟', options: ['خبر إن', 'اسم إن', 'فاعل', 'مفعول به'], correct: 0 },
+      { q: 'ما هو جمع كلمة "عالم"؟', options: ['علماء', 'عالمون', 'أعلام', 'عالمين'], correct: 0 },
+      { q: 'أي الجمل التالية صحيحة من حيث الإملاء؟', options: ['في المدرسة فناء', 'في المدرسه فناء', 'في المدرسة فناءً', 'في المدرسه فناءً'],
+        correct: 2 },
+      { q: 'ما هو الفعل المضارع في جملة "يلعب الأطفال في الحديقة"؟', options: ['يلعب', 'الأطفال', 'الحديقة', 'في'], correct: 0 },
+      { q: 'ما هو إعراب "الحديقة" في جملة "دخلت إلى الحديقة"؟', options: ['مفعول به', 'اسم مجرور', 'مبتدأ', 'خبر'], correct: 1 },
+      { q: 'أي من هذه الكلمات تكتب بهمزة متطرفة؟', options: ['قرأ', 'قرأَ', 'قرأْ', 'قرأِ'], correct: 0 },
+      { q: 'ما هو جمع كلمة "كتاب"؟', options: ['كتب', 'كتابات', 'أكتاب', 'كتائب'], correct: 0 },
+      { q: 'في جملة "الحق واضح"، ما هو الخبر؟', options: ['الحق', 'واضح', 'هو', 'الحق واضح'], correct: 1 },
+      { q: 'أي الجمل التالية صحيحة من حيث استخدام "إن"؟', options: ['إن الطالب مجتهد', 'إن الطالب مجتهداً', 'إن الطالب مجتهدان',
+          'إن الطالب مجتهدين'
+        ], correct: 0 },
+      { q: 'ما هو نوع كلمة "في" في جملة "الكتاب في الحقيبة"؟', options: ['حرف جر', 'اسم', 'فعل', 'ظرف'], correct: 0 },
+      { q: 'ما هو إعراب كلمة "مدرسة" في جملة "ذهبت إلى المدرسة"؟', options: ['مفعول به', 'اسم مجرور', 'مبتدأ', 'فاعل'], correct: 1 },
+      { q: 'أي الجمل التالية صحيحة من حيث التذكير والتأنيث؟', options: ['الشمس مشرقة', 'الشمس مشرق', 'الشمس مشرقةً', 'الشمس مشرقاً'],
+        correct: 0 },
+      { q: 'ما هو جمع كلمة "معلم"؟', options: ['معلمون', 'معلمات', 'معلمين', 'معالم'], correct: 0 },
+      { q: 'في جملة "أحب القراءة"، ما هو المفعول به؟', options: ['أحب', 'القراءة', 'هي', 'أحب القراءة'], correct: 1 },
+      { q: 'أي من هذه الكلمات تكتب بشكل صحيح؟', options: ['مستشفى', 'مستشفي', 'مستشفىَ', 'مستشفيً'], correct: 0 },
+      { q: 'ما هو الفعل الماضي في جملة "كتب الطالب الدرس"؟', options: ['كتب', 'الطالب', 'الدرس', 'كتب الطالب'], correct: 0 },
+      { q: 'ما هو إعراب "جميل" في جملة "الحديقة جميلة"؟', options: ['خبر', 'مبتدأ', 'فاعل', 'نعت'], correct: 0 },
+      { q: 'أي الجمل التالية صحيحة من حيث الهمزة؟', options: ['رأيت أستاذي', 'رأيت استاذي', 'رايت أستاذي', 'رايت استاذي'], correct: 0 },
+      { q: 'ما هو جمع كلمة "قلم"؟', options: ['أقلام', 'قلوم', 'قلام', 'قلمين'], correct: 0 },
+      { q: 'في جملة "السماء صافية اليوم"، ما هو الظرف؟', options: ['اليوم', 'السماء', 'صافية', 'هي'], correct: 0 },
+      { q: 'ما هو نوع الفعل في جملة "اكتب الدرس"؟', options: ['أمر', 'ماضي', 'مضارع', 'مصدر'], correct: 0 },
+      { q: 'أي الجمل التالية صحيحة من حيث "لا" النافية؟', options: ['لا أحد حاضر', 'لا أحد حاضراً', 'لا أحد حاضرون', 'لا أحد حاضرين'],
+        correct: 0 },
+      { q: 'ما هو إعراب "الدرس" في جملة "أدرس الدرس"؟', options: ['مفعول به', 'فاعل', 'مبتدأ', 'خبر'], correct: 0 },
+      { q: 'أي من هذه الكلمات تكتب بتنوين الفتح؟', options: ['كتاباً', 'كتابٌ', 'كتابٍ', 'كتاب'], correct: 0 },
+      { q: 'ما هو جمع كلمة "وردة"؟', options: ['ورود', 'وردات', 'أوراد', 'ورائد'], correct: 0 },
+      { q: 'في جملة "المعلم يعلم الطلاب"، ما هو الفاعل؟', options: ['المعلم', 'الطلاب', 'يعلم', 'هو'], correct: 0 },
+      { q: 'أي الجمل التالية صحيحة من حيث إعراب "إن"؟', options: ['إن الله كريم', 'إن الله كريماً', 'إن الله كريمٌ', 'إن الله كرما'],
+        correct: 0 },
+      { q: 'ما هو نوع الهمزة في كلمة "امرؤ"؟', options: ['همزة وصل', 'همزة قطع', 'همزة مد', 'همزة نبرة'], correct: 0 },
+      { q: 'ما هو إعراب "مصر" في جملة "زرت مصر"؟', options: ['مفعول به', 'فاعل', 'مبتدأ', 'خبر'], correct: 0 },
+      { q: 'أي الجمل التالية صحيحة من حيث التمييز؟', options: ['اشتريت كيلو تفاحاً', 'اشتريت كيلو تفاحٍ', 'اشتريت كيلو تفاح', 'اشتريت كيلو تفاحة'],
+        correct: 0 },
+      { q: 'ما هو جمع كلمة "شجرة"؟', options: ['أشجار', 'شجرات', 'شجور', 'شجيرات'], correct: 0 },
+      { q: 'في جملة "سافر الطالب إلى الجامعة"، ما هو الحرف الجر؟', options: ['إلى', 'سافر', 'الطالب', 'الجامعة'], correct: 0 },
+      { q: 'أي من هذه الكلمات تكتب بشكل صحيح؟', options: ['مؤمن', 'موءمن', 'مؤمين', 'موامن'], correct: 0 },
+      { q: 'ما هو إعراب "متفوق" في جملة "الطالب متفوق"؟', options: ['خبر', 'مبتدأ', 'فاعل', 'نعت'], correct: 0 },
+    ];
+
+    let testQuestions = [];
+    let testTimer = null;
+    let testTimeLeft = 600;
+    let testActive = false;
+    let testSubmitted = false;
+    let testBlurCount = 0;
+    let certificateId = '';
+
+    function shuffleArray(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function generateCertId() {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      let id = 'SS-';
+      for (let i = 0; i < 8; i++) {
+        id += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return id;
+    }
+
+    function startTest() {
+      const name = document.getElementById('test-name').value.trim();
+      if (!name) { alert('يرجى إدخال اسمك'); return; }
+
+      const shuffled = shuffleArray([...questionBank]);
+      testQuestions = shuffled.slice(0, 20);
+      certificateId = generateCertId();
+
+      document.getElementById('test-setup').style.display = 'none';
+      document.getElementById('test-area').style.display = 'block';
+      document.getElementById('test-result').style.display = 'none';
+      testActive = true;
+      testSubmitted = false;
+      testTimeLeft = 600;
+      testBlurCount = 0;
+
+      renderTestQuestions();
+      updateTestProgress();
+      updateTestTimer();
+
+      if (testTimer) clearInterval(testTimer);
+      testTimer = setInterval(() => {
+        testTimeLeft--;
+        updateTestTimer();
+        if (testTimeLeft <= 0) {
+          clearInterval(testTimer);
+          alert('⏰ انتهى الوقت! سيتم إنهاء الاختبار.');
+          submitTest();
+        }
+      }, 1000);
+
+      document.addEventListener('visibilitychange', handleVisibilityChange);
+      window.addEventListener('beforeunload', handleBeforeUnload);
+    }
+
+    function handleVisibilityChange() {
+      if (document.hidden && testActive && !testSubmitted) {
+        testBlurCount++;
+        if (testBlurCount >= 1) {
+          clearInterval(testTimer);
+          testActive = false;
+          alert('❌ تم إلغاء الاختبار بسبب مغادرة الصفحة.');
+          resetTest();
+        }
+      }
+    }
+
+    function handleBeforeUnload(e) {
+      if (testActive && !testSubmitted) {
+        e.preventDefault();
+        e.returnValue = 'الاختبار قيد التقدم، هل تريد المغادرة؟';
+        return e.returnValue;
+      }
+    }
+
+    function renderTestQuestions() {
+      const container = document.getElementById('test-questions');
+      container.innerHTML = '';
+      testQuestions.forEach((q, idx) => {
+        const div = document.createElement('div');
+        div.className = 'test-question';
+        div.dataset.index = idx;
+        const optLetters = ['أ', 'ب', 'ج', 'د'];
+        div.innerHTML = `
+          <div class="q-number">سؤال ${idx + 1}</div>
+          <div class="q-text">${q.q}</div>
+          <div class="q-options">
+            ${q.options.map((opt, oi) => `
+              <label><input type="radio" name="q${idx}" value="${oi}" onchange="updateTestProgress()"> ${optLetters[oi]}. ${opt}</label>
+            `).join('')}
+          </div>
+          <div class="q-result" id="q-result-${idx}"></div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function updateTestTimer() {
+      const mins = Math.floor(testTimeLeft / 60);
+      const secs = testTimeLeft % 60;
+      const timer = document.getElementById('test-timer');
+      timer.textContent = `⏱️ ${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+      if (testTimeLeft < 60) timer.classList.add('warning');
+      else timer.classList.remove('warning');
+    }
+
+    function updateTestProgress() {
+      const total = testQuestions.length;
+      let answered = 0;
+      testQuestions.forEach((_, idx) => {
+        const selected = document.querySelector(`input[name="q${idx}"]:checked`);
+        if (selected) answered++;
+      });
+      document.getElementById('test-progress-text').textContent = `السؤال ${Math.min(answered + 1, total)} / ${total}`;
+      document.getElementById('test-score-display').textContent = `✅ ${answered}`;
+    }
+
+    function submitTest() {
+      if (testSubmitted) return;
+      testSubmitted = true;
+      testActive = false;
+      if (testTimer) clearInterval(testTimer);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+
+      let correct = 0;
+      testQuestions.forEach((q, idx) => {
+        const selected = document.querySelector(`input[name="q${idx}"]:checked`);
+        const resultEl = document.getElementById(`q-result-${idx}`);
+        const questionDiv = document.querySelector(`.test-question[data-index="${idx}"]`);
+        if (selected) {
+          const val = parseInt(selected.value);
+          if (val === q.correct) {
+            correct++;
+            resultEl.textContent = '✅ صحيح';
+            resultEl.className = 'q-result correct';
+            questionDiv.classList.add('correct');
+          } else {
+            resultEl.textContent = `❌ خطأ (الإجابة الصحيحة: ${['أ','ب','ج','د'][q.correct]})`;
+            resultEl.className = 'q-result wrong';
+            questionDiv.classList.add('wrong');
+          }
+        } else {
+          resultEl.textContent = `❌ لم يتم الإجابة (الصحيح: ${['أ','ب','ج','د'][q.correct]})`;
+          resultEl.className = 'q-result wrong';
+          questionDiv.classList.add('wrong');
+        }
+      });
+
+      document.getElementById('test-area').style.display = 'none';
+      document.getElementById('test-result').style.display = 'block';
+
+      const name = document.getElementById('test-name').value;
+      const pct = Math.round((correct / testQuestions.length) * 100);
+      let level = '';
+      if (pct >= 90) level = 'ممتاز (C1/C2)';
+      else if (pct >= 75) level = 'جيد جداً (B2)';
+      else if (pct >= 60) level = 'جيد (B1)';
+      else if (pct >= 45) level = 'مقبول (A2)';
+      else level = 'مبتدئ (A1)';
+
+      document.getElementById('cert-name').textContent = name;
+      document.getElementById('cert-level').textContent = `المستوى: ${level}`;
+      document.getElementById('cert-score').textContent = `النتيجة: ${correct}/${testQuestions.length} (${pct}%)`;
+      document.getElementById('cert-id').textContent = `الرقم التسلسلي: ${certificateId}`;
+
+      document.querySelector('#modal-arabic-test .modal-body').scrollTop = 0;
+    }
+
+    function resetTest() {
+      testActive = false;
+      testSubmitted = false;
+      if (testTimer) clearInterval(testTimer);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+
+      document.getElementById('test-setup').style.display = 'block';
+      document.getElementById('test-area').style.display = 'none';
+      document.getElementById('test-result').style.display = 'none';
+      document.getElementById('test-name').value = '';
+    }
+
+    async function downloadCertificate(format) {
+      const btn = event.target;
+      btn.disabled = true;
+      try {
+        const canvas = await html2canvas(document.getElementById('certificate'), { scale: 2, useCORS: true,
+          backgroundColor: '#fff' });
+        if (format === 'jpeg') {
+          const link = document.createElement('a');
+          link.download = 'شهادة-سلام-سبيس.jpg';
+          link.href = canvas.toDataURL('image/jpeg', 0.95);
+          link.click();
+        } else {
+          const { jsPDF } = window.jspdf;
+          const pdf = new jsPDF({ orientation: 'portrait', unit: 'px', format: [canvas.width / 2, canvas.height / 2] });
+          pdf.addImage(canvas.toDataURL('image/jpeg', 0.9), 'JPEG', 0, 0, canvas.width / 2, canvas.height / 2);
+          pdf.save('شهادة-سلام-سبيس.pdf');
+        }
+      } catch (err) { alert('خطأ: ' + err.message); }
+      btn.disabled = false;
+    }
+
+    // ===== INIT =====
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.modal-overlay.active').forEach(m => {
+          m.classList.remove('active');
+          document.body.style.overflow = '';
+        });
+        document.getElementById('mobileNav').classList.remove('open');
+      }
+    });
+  </script>
+</body>
+</html>
