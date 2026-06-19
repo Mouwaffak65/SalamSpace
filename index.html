@@ -678,16 +678,18 @@
       border: 1px solid var(--border);
       border-radius: var(--r-sm);
       margin-top: 16px;
-      font-family: 'Tahoma', 'Arial', 'Cairo', sans-serif;
+      font-family: 'Arial', 'Helvetica', 'Tahoma', sans-serif;
       overflow: hidden;
       direction: rtl;
       text-align: right;
+      width: 100%;
     }
 
     #cv-preview * {
       direction: rtl !important;
       text-align: right !important;
-      font-family: 'Tahoma', 'Arial', 'Cairo', sans-serif !important;
+      font-family: 'Arial', 'Helvetica', 'Tahoma', sans-serif !important;
+      unicode-bidi: embed !important;
     }
 
     .cv-header-bar {
@@ -698,6 +700,7 @@
       align-items: flex-start;
       gap: 16px;
       direction: rtl;
+      flex-wrap: wrap;
     }
 
     .cv-photo-circle {
@@ -1684,6 +1687,60 @@
     .install-guide ol li {
       margin-bottom: 4px;
     }
+
+    /* ===== COVER LETTER ===== */
+    #cover-letter-preview {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--r-sm);
+      padding: 24px;
+      margin-top: 16px;
+      direction: rtl;
+      font-family: 'Arial', 'Helvetica', 'Tahoma', sans-serif;
+      line-height: 2;
+      white-space: pre-line;
+    }
+    #cover-letter-preview * {
+      direction: rtl !important;
+      font-family: 'Arial', 'Helvetica', 'Tahoma', sans-serif !important;
+    }
+
+    /* ===== CV ANALYZER ===== */
+    .analyzer-result {
+      background: var(--paper);
+      border-radius: var(--r);
+      padding: 20px;
+      margin-top: 16px;
+      border: 1px solid var(--border);
+    }
+    .analyzer-result .score-circle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--white);
+      margin-bottom: 12px;
+    }
+    .analyzer-result .score-circle.good {
+      background: var(--sage);
+    }
+    .analyzer-result .score-circle.medium {
+      background: var(--clay);
+    }
+    .analyzer-result .score-circle.bad {
+      background: #c0392b;
+    }
+    .analyzer-result .tip-item {
+      padding: 8px 12px;
+      margin: 4px 0;
+      border-radius: var(--r-sm);
+      background: var(--white);
+      border-right: 3px solid var(--clay);
+    }
   </style>
 </head>
 <body>
@@ -1752,7 +1809,7 @@
     <div class="stats-bar">
       <div class="stats-inner">
         <div class="stat-item">
-          <div class="stat-num">8+</div>
+          <div class="stat-num">10+</div>
           <div class="stat-label">أداة مجانية</div>
         </div>
         <div class="stat-item">
@@ -1813,6 +1870,20 @@
             <h3>السيرة الذاتية</h3>
             <p>أنشئ CV احترافي مع صورة، جاهز للتحميل PDF/JPEG.</p>
             <span class="tool-tag">CV بالعربية</span>
+          </div>
+
+          <div class="tool-card" onclick="openTool('cover-letter')">
+            <div class="tool-icon">✉️</div>
+            <h3>خطاب الدافع</h3>
+            <p>أنشئ خطاب دافع شخصي مخصص لمنحتك الدراسية.</p>
+            <span class="tool-tag">خطاب الدافع</span>
+          </div>
+
+          <div class="tool-card" onclick="openTool('cv-analyzer')">
+            <div class="tool-icon">🔍</div>
+            <h3>تحليل السيرة الذاتية</h3>
+            <p>احصل على نصائح فورية لتحسين سيرتك الذاتية.</p>
+            <span class="tool-tag">تحليل CV</span>
           </div>
 
           <div class="tool-card" onclick="openTool('translate')">
@@ -2058,37 +2129,30 @@
           <h1>تواصل معنا</h1>
           <p>يمكنك التواصل مع فريق سلام سبيس عبر القنوات التالية:</p>
           <div class="contact-methods">
-            <a href="mailto:contact@salamspace.com" class="contact-method">
+            <a href="mailto:salamspacee@gmail.com" class="contact-method">
               <span class="icon">📧</span>
               <div>
                 <div>Gmail</div>
-                <div class="label">contact@salamspace.com</div>
+                <div class="label">salamspacee@gmail.com</div>
               </div>
             </a>
-            <a href="#" class="contact-method" onclick="alert('رابط صفحة الفيسبوك: https://facebook.com/salamspace')">
-              <span class="icon">📘</span>
-              <div>
-                <div>Facebook</div>
-                <div class="label">SalamSpace</div>
-              </div>
-            </a>
-            <a href="#" class="contact-method" onclick="alert('رابط قناة التلغرام: https://t.me/salamspace')">
+            <a href="https://t.me/salamspace1" target="_blank" class="contact-method">
               <span class="icon">✈️</span>
               <div>
                 <div>Telegram</div>
-                <div class="label">@SalamSpace</div>
+                <div class="label">@salamspace1</div>
               </div>
             </a>
-            <a href="#" class="contact-method" onclick="alert('رابط واتساب: https://wa.me/213XXXXXXXXX')">
+            <a href="https://whatsapp.com/channel/0029VbCHAf74inosW5vsm20u" target="_blank" class="contact-method">
               <span class="icon">💬</span>
               <div>
                 <div>WhatsApp</div>
-                <div class="label">+213 XXX XXX XXX</div>
+                <div class="label">قناة واتساب</div>
               </div>
             </a>
           </div>
           <p style="margin-top:16px; font-size:0.9rem; color:var(--muted);">
-            أو مراسلتنا عبر البريد الإلكتروني: <strong>contact@salamspace.com</strong>
+            أو مراسلتنا عبر البريد الإلكتروني: <strong>salamspacee@gmail.com</strong>
           </p>
           <div style="margin-top:20px;">
             <button class="btn-action" onclick="showPage('home')">← العودة للرئيسية</button>
@@ -2116,8 +2180,9 @@
         <div class="footer-col">
           <h4>المزيد</h4>
           <a href="#" onclick="openTool('cv-builder')">إنشاء CV</a>
+          <a href="#" onclick="openTool('cover-letter')">خطاب الدافع</a>
+          <a href="#" onclick="openTool('cv-analyzer')">تحليل CV</a>
           <a href="#" onclick="openTool('translate')">ترجمة نصوص</a>
-          <a href="#" onclick="openTool('pdf-translate')">ترجمة PDF</a>
           <a href="#" onclick="openTool('arabic-test')">اختبار العربية</a>
         </div>
         <div class="footer-col">
@@ -2223,7 +2288,7 @@
     </div>
   </div>
 
-  <!-- Tool: Compress PDF (FIXED) -->
+  <!-- Tool: Compress PDF -->
   <div class="modal-overlay" id="modal-compress-pdf">
     <div class="modal">
       <div class="modal-header">
@@ -2260,7 +2325,7 @@
     </div>
   </div>
 
-  <!-- Tool: CV Builder - CORRIGÉ RTL -->
+  <!-- Tool: CV Builder -->
   <div class="modal-overlay" id="modal-cv-builder">
     <div class="modal" style="max-width:800px">
       <div class="modal-header">
@@ -2278,31 +2343,31 @@
           <div class="form-row">
             <div class="form-group">
               <label>الاسم الكامل *</label>
-              <input type="text" id="cv-name" placeholder="خالد موفق" oninput="updateCV()">
+              <input type="text" id="cv-name" placeholder="أحمد محمد الحسيني" oninput="updateCV()">
             </div>
             <div class="form-group">
               <label>التخصص</label>
-              <input type="text" id="cv-role" placeholder="طالب علم" oninput="updateCV()">
+              <input type="text" id="cv-role" placeholder="طالب دكتوراه في الفيزياء" oninput="updateCV()">
             </div>
           </div>
           <div class="form-row">
             <div class="form-group">
               <label>البريد الإلكتروني</label>
-              <input type="email" id="cv-email" placeholder="houdmouwaffal@gmail.com" oninput="updateCV()">
+              <input type="email" id="cv-email" placeholder="ahmed.hussein@email.com" oninput="updateCV()">
             </div>
             <div class="form-group">
               <label>رقم الهاتف</label>
-              <input type="tel" id="cv-phone" placeholder="+229 58 65 65 10" oninput="updateCV()">
+              <input type="tel" id="cv-phone" placeholder="+213 55 12 34 56" oninput="updateCV()">
             </div>
           </div>
           <div class="form-row">
             <div class="form-group">
               <label>المدينة / البلد</label>
-              <input type="text" id="cv-location" placeholder="باراكو، بنين" oninput="updateCV()">
+              <input type="text" id="cv-location" placeholder="الجزائر العاصمة، الجزائر" oninput="updateCV()">
             </div>
             <div class="form-group">
               <label>LinkedIn</label>
-              <input type="text" id="cv-web" placeholder="linkedin.com/in/yourname" oninput="updateCV()">
+              <input type="text" id="cv-web" placeholder="linkedin.com/in/ahmedhussein" oninput="updateCV()">
             </div>
           </div>
           <div class="form-group">
@@ -2311,35 +2376,35 @@
           </div>
           <div class="form-group">
             <label>الملخص الشخصي</label>
-            <textarea id="cv-summary" placeholder="طالب علم أبحث عن منحة دراسية..." oninput="updateCV()"></textarea>
+            <textarea id="cv-summary" placeholder="طالب دكتوراه متخصص في الفيزياء النظرية، حاصل على ماجستير في الفيزياء من جامعة الجزائر، أبحث عن منحة دراسية لإكمال أبحاثي..." oninput="updateCV()"></textarea>
           </div>
         </div>
 
         <div class="tab-panel" id="cv-edu">
           <div class="form-group">
             <label>المسار التعليمي</label>
-            <textarea id="cv-education" rows="4" placeholder="الثانوية - مركز الدراسات الإسلامية والبحوث والدعوة - 2022" oninput="updateCV()"></textarea>
+            <textarea id="cv-education" rows="4" placeholder="دكتوراه في الفيزياء النظرية - جامعة الجزائر، 2022-2026 (حالياً)&#10;ماجستير في الفيزياء - جامعة الجزائر، 2020-2022&#10;بكالوريا علوم تجريبية - ثانوية الأمير عبد القادر، 2019" oninput="updateCV()"></textarea>
           </div>
           <div class="form-group">
             <label>الخبرات والتدريب</label>
-            <textarea id="cv-experience" rows="4" placeholder="حفظ القرآن - 2018" oninput="updateCV()"></textarea>
+            <textarea id="cv-experience" rows="4" placeholder="مساعد تدريس - جامعة الجزائر، 2022-2024&#10;باحث مساعد - مركز البحوث العلمية، 2021-2022" oninput="updateCV()"></textarea>
           </div>
           <div class="form-group">
             <label>المهارات</label>
-            <textarea id="cv-skills" rows="3" placeholder="وورد، الترجيل، بيكتون" oninput="updateCV()"></textarea>
+            <textarea id="cv-skills" rows="3" placeholder="تحليل البيانات، MATLAB، Python، البحث العلمي، كتابة التقارير الأكاديمية" oninput="updateCV()"></textarea>
           </div>
           <div class="form-group">
             <label>اللغات</label>
-            <input type="text" id="cv-languages" placeholder="العربية (مبتدئ)، الفرنسية (جيد جدا)" oninput="updateCV()">
+            <input type="text" id="cv-languages" placeholder="العربية (أصلية)، الفرنسية (ممتاز)، الإنجليزية (جيد جداً)" oninput="updateCV()">
           </div>
           <div class="form-group">
             <label>المشاريع والإنجازات</label>
-            <textarea id="cv-projects" rows="3" placeholder="مشروع تخرج: ..." oninput="updateCV()"></textarea>
+            <textarea id="cv-projects" rows="3" placeholder="بحث حول "الموجات الكهرومغناطيسية في الأوساط غير المتجانسة" (مشروع ماجستير)&#10;منشور في المجلة العلمية للفيزياء - 2023" oninput="updateCV()"></textarea>
           </div>
         </div>
 
         <div class="tab-panel" id="cv-preview-tab">
-          <div id="cv-preview">
+          <div id="cv-preview" dir="rtl">
             <div class="cv-header-bar">
               <div class="cv-photo-circle" id="cv-photo-preview">👤</div>
               <div>
@@ -2379,6 +2444,129 @@
           <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;">
             <button class="btn-action clay" onclick="downloadCV('pdf')">⬇️ PDF</button>
             <button class="btn-action" onclick="downloadCV('jpeg')">🖼️ JPEG</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tool: Cover Letter -->
+  <div class="modal-overlay" id="modal-cover-letter">
+    <div class="modal" style="max-width:800px">
+      <div class="modal-header">
+        <h2>✉️ خطاب الدافع</h2>
+        <button class="modal-close" onclick="closeTool('cover-letter')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-row">
+          <div class="form-group">
+            <label>الاسم الكامل *</label>
+            <input type="text" id="cl-name" placeholder="أحمد محمد الحسيني" oninput="genererLettre()">
+          </div>
+          <div class="form-group">
+            <label>البريد الإلكتروني</label>
+            <input type="email" id="cl-email" placeholder="ahmed.hussein@email.com" oninput="genererLettre()">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>رقم الهاتف</label>
+            <input type="text" id="cl-phone" placeholder="+213 55 12 34 56" oninput="genererLettre()">
+          </div>
+          <div class="form-group">
+            <label>المدينة / البلد</label>
+            <input type="text" id="cl-location" placeholder="الجزائر العاصمة، الجزائر" oninput="genererLettre()">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>الجامعة المستهدفة</label>
+            <input type="text" id="cl-university" placeholder="جامعة باريس ساكلاي" oninput="genererLettre()">
+          </div>
+          <div class="form-group">
+            <label>برنامج المنحة</label>
+            <input type="text" id="cl-program" placeholder="منحة الدكتوراه في الفيزياء" oninput="genererLettre()">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>التخصص الحالي</label>
+          <input type="text" id="cl-major" placeholder="الفيزياء النظرية" oninput="genererLettre()">
+        </div>
+        <div class="form-group">
+          <label>الخبرات والإنجازات (سطر واحد)</label>
+          <input type="text" id="cl-achievements" placeholder="ماجستير في الفيزياء، منشور في مجلة علمية، مساعد تدريس" oninput="genererLettre()">
+        </div>
+        <div class="form-group">
+          <label>الهدف من المنحة</label>
+          <input type="text" id="cl-goal" placeholder="إكمال أبحاثي في مجال الفيزياء النظرية والمساهمة في تطوير البحث العلمي" oninput="genererLettre()">
+        </div>
+
+        <div style="margin-top:16px;">
+          <button class="btn-action clay" onclick="genererLettre()">📝 إنشاء الخطاب</button>
+        </div>
+
+        <div id="cover-letter-preview" style="margin-top:16px;background:var(--white);border:1px solid var(--border);border-radius:var(--r-sm);padding:24px;direction:rtl;font-family:'Arial','Helvetica','Tahoma',sans-serif;line-height:2;white-space:pre-line;">
+          <p style="text-align:center;font-weight:700;font-size:1.2rem;">خطاب الدافع</p>
+          <p style="text-align:center;">_________________________________</p>
+          <br>
+          <p>السيد/ة مدير/ة شؤون الطلاب</p>
+          <p>جامعة [اسم الجامعة]</p>
+          <p>الموضوع: طلب منحة دراسية</p>
+          <br>
+          <p>أنا الطالب [الاسم الكامل]، حاصل على [التخصص]، أتقدم إليكم بطلب للحصول على منحة دراسية في [برنامج المنحة] بجامعة [الجامعة المستهدفة].</p>
+          <br>
+          <p>أمتلك خبرة في [الخبرات]، وأطمح من خلال هذه المنحة إلى [الهدف].</p>
+          <br>
+          <p>أرفق لكم سيرتي الذاتية وجميع الوثائق المطلوبة.</p>
+          <br>
+          <p>أمل أن تنال طلبي القبول، وشكراً لكم.</p>
+          <br>
+          <p>توقيع: [الاسم الكامل]</p>
+          <p>البريد الإلكتروني: [البريد]</p>
+          <p>الهاتف: [الهاتف]</p>
+          <p>المدينة: [المدينة]</p>
+        </div>
+        <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn-action" onclick="telechargerLettre('pdf')">⬇️ تحميل PDF</button>
+          <button class="btn-action clay" onclick="telechargerLettre('jpeg')">🖼️ تحميل JPEG</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tool: CV Analyzer -->
+  <div class="modal-overlay" id="modal-cv-analyzer">
+    <div class="modal" style="max-width:800px">
+      <div class="modal-header">
+        <h2>🔍 تحليل السيرة الذاتية</h2>
+        <button class="modal-close" onclick="closeTool('cv-analyzer')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-info">
+          <strong>📋 التعليمات :</strong> الصق نص سيرتك الذاتية أو املأ الحقول أدناه للحصول على تحليل مفصل ونصائح لتحسينها.
+        </div>
+
+        <div class="form-group">
+          <label>نص السيرة الذاتية</label>
+          <textarea id="cv-analyzer-text" rows="8" placeholder="الصق هنا نص سيرتك الذاتية للتحليل..." style="min-height:150px;"></textarea>
+        </div>
+
+        <button class="btn-action clay" onclick="analyzeCV()">🔍 تحليل سيرتي الذاتية</button>
+
+        <div id="analyzer-result" style="display:none;margin-top:16px;">
+          <div class="analyzer-result">
+            <div style="text-align:center;">
+              <div class="score-circle good" id="analyzer-score">85%</div>
+              <h3 id="analyzer-title">✅ سيرة ذاتية جيدة</h3>
+            </div>
+            <div style="margin-top:12px;">
+              <p><strong>📊 ملخص التحليل :</strong></p>
+              <div id="analyzer-summary" style="font-size:0.9rem;color:var(--muted);"></div>
+            </div>
+            <div style="margin-top:12px;">
+              <p><strong>💡 نصائح للتحسين :</strong></p>
+              <div id="analyzer-tips"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -2789,7 +2977,7 @@
       spin.classList.remove('show');
     }
 
-    // ===== TOOL 4: COMPRESS PDF (FIXED) =====
+    // ===== TOOL 4: COMPRESS PDF =====
     let compressFile = null;
 
     function updateCompressLabel(v) {
@@ -2847,7 +3035,7 @@
       btn.disabled = false;
     }
 
-    // ===== TOOL 5: CV BUILDER - CORRIGÉ RTL =====
+    // ===== TOOL 5: CV BUILDER =====
     let cvPhotoDataUrl = '';
 
     function loadCVPhoto(input) {
@@ -2887,8 +3075,6 @@
       btns.forEach(b => b.disabled = true);
       try {
         const element = document.getElementById('cv-preview');
-
-        // Forcer la direction RTL avant la capture
         element.style.direction = 'rtl';
         element.style.textAlign = 'right';
 
@@ -2941,7 +3127,161 @@
       if (panelId === 'cv-preview-tab') updateCV();
     }
 
-    // ===== TOOL 6: TRANSLATION =====
+    // ===== TOOL 6: COVER LETTER (ARABIC) =====
+    function genererLettre() {
+      const name = document.getElementById('cl-name').value || '[الاسم الكامل]';
+      const email = document.getElementById('cl-email').value || '[البريد الإلكتروني]';
+      const phone = document.getElementById('cl-phone').value || '[الهاتف]';
+      const location = document.getElementById('cl-location').value || '[المدينة]';
+      const university = document.getElementById('cl-university').value || '[اسم الجامعة]';
+      const program = document.getElementById('cl-program').value || '[برنامج المنحة]';
+      const major = document.getElementById('cl-major').value || '[التخصص]';
+      const achievements = document.getElementById('cl-achievements').value || '[الخبرات والإنجازات]';
+      const goal = document.getElementById('cl-goal').value || '[الهدف من المنحة]';
+
+      const letter = `
+        السيد/ة مدير/ة شؤون الطلاب
+        جامعة ${university}
+
+        الموضوع: طلب منحة دراسية
+
+        أنا الطالب ${name}، حاصل على ${major}، أتقدم إليكم بطلب للحصول على منحة دراسية في ${program} بجامعة ${university}.
+
+        أمتلك خبرة في ${achievements}، وأطمح من خلال هذه المنحة إلى ${goal}.
+
+        أرفق لكم سيرتي الذاتية وجميع الوثائق المطلوبة.
+
+        أمل أن تنال طلبي القبول، وشكراً لكم.
+
+        توقيع: ${name}
+        البريد الإلكتروني: ${email}
+        الهاتف: ${phone}
+        المدينة: ${location}
+      `;
+
+      document.getElementById('cover-letter-preview').textContent = letter;
+    }
+
+    async function telechargerLettre(format) {
+      const element = document.getElementById('cover-letter-preview');
+      const btns = document.querySelectorAll('#modal-cover-letter .btn-action');
+      btns.forEach(b => b.disabled = true);
+
+      try {
+        const canvas = await html2canvas(element, {
+          scale: 2,
+          useCORS: true,
+          backgroundColor: '#ffffff',
+          logging: false
+        });
+
+        if (format === 'jpeg') {
+          const link = document.createElement('a');
+          link.download = 'خطاب-الدافع-سلام-سبيس.jpg';
+          link.href = canvas.toDataURL('image/jpeg', 0.95);
+          link.click();
+        } else {
+          const { jsPDF } = window.jspdf;
+          const pdf = new jsPDF({
+            orientation: 'portrait',
+            unit: 'px',
+            format: [canvas.width / 2, canvas.height / 2]
+          });
+          pdf.addImage(canvas.toDataURL('image/jpeg', 0.9), 'JPEG', 0, 0, canvas.width / 2, canvas.height / 2);
+          pdf.save('خطاب-الدافع-سلام-سبيس.pdf');
+        }
+      } catch (err) {
+        alert('خطأ: ' + err.message);
+      }
+      btns.forEach(b => b.disabled = false);
+    }
+
+    // ===== TOOL 7: CV ANALYZER =====
+    function analyzeCV() {
+      const text = document.getElementById('cv-analyzer-text').value.trim();
+      const resultDiv = document.getElementById('analyzer-result');
+
+      if (!text || text.length < 50) {
+        alert('الرجاء إدخال نص كافٍ لتحليل السيرة الذاتية (على الأقل 50 حرف)');
+        return;
+      }
+
+      resultDiv.style.display = 'block';
+
+      let score = 50;
+      let tips = [];
+      let summary = [];
+
+      // Vérification de la longueur
+      if (text.length > 200) {
+        score += 10;
+        summary.push('✅ السيرة الذاتية بطول مناسب');
+      } else {
+        tips.push('📝 سيرتك الذاتية قصيرة جداً. أضف المزيد من التفاصيل حول خبراتك وتكويناتك.');
+      }
+
+      // Vérification des sections
+      const hasEducation = /étud|educ|formation|diplô|université|école|licence|master|doctorat|bachelor|bac|تعليم|دراسة|جامعة|كلية|مدرسة|بكالوريا|ليسانس|ماجستير|دكتوراه/i
+        .test(text);
+      const hasExperience = /expéri|travail|stage|emploi|poste|responsable|gérer|projet|réalis|accompl|خبرة|عمل|تدريب|منصب|مسؤول|إدارة|مشروع|إنجاز/i
+        .test(text);
+      const hasSkills = /compét|savoir|maîtrise|langue|informatique|logiciel|word|excel|python|java|html|css|sql|photoshop|illustrator|مهارة|إتقان|لغة|برمجة|تصميم|تحليل/i
+        .test(text);
+      const hasContact = /email|téléphone|adresse|linkedin|@|(\+[0-9])|([0-9]{2,4}[-. ]?[0-9]{2,4}[-. ]?[0-9]{2,4})|بريد|هاتف|عنوان|جوال/i
+        .test(text);
+
+      if (hasEducation) { score += 8;
+        summary.push('✅ قسم "التعليم" موجود'); } else { tips.push('🎓 أضف قسم "التعليم" مع شهاداتك ومؤسساتك.'); }
+
+      if (hasExperience) { score += 8;
+        summary.push('✅ قسم "الخبرات" موجود'); } else { tips.push(
+          '💼 أضف قسم "الخبرات" مع تدريباتك، أعمالك أو مشاريعك. حتى التجارب التطوعية مهمة!'); }
+
+      if (hasSkills) { score += 8;
+        summary.push('✅ قسم "المهارات" موجود'); } else { tips.push(
+          '🛠️ أضف قسم "المهارات" مع قدراتك التقنية واللغوية.'); }
+
+      if (hasContact) { score += 6;
+        summary.push('✅ معلومات الاتصال موجودة'); } else { tips.push(
+          '📞 لا تنسَ إضافة معلومات الاتصال: البريد الإلكتروني، الهاتف، و LinkedIn إن أمكن.'); }
+
+      // Vérification de la structure
+      if (text.includes('---') || text.includes('##') || text.includes('•') || text.includes('-')) {
+        score += 5;
+        summary.push('✅ هيكل منظم بشكل جيد');
+      } else {
+        tips.push('📋 استخدم عناوين (##) أو فواصل (---) لتنظيم سيرتك الذاتية بشكل واضح.');
+      }
+
+      score = Math.min(score, 100);
+
+      const scoreEl = document.getElementById('analyzer-score');
+      const titleEl = document.getElementById('analyzer-title');
+      const summaryEl = document.getElementById('analyzer-summary');
+      const tipsEl = document.getElementById('analyzer-tips');
+
+      if (score >= 75) {
+        scoreEl.className = 'score-circle good';
+        titleEl.textContent = '✅ سيرة ذاتية جيدة';
+      } else if (score >= 50) {
+        scoreEl.className = 'score-circle medium';
+        titleEl.textContent = '⚠️ سيرة ذاتية تحتاج إلى تحسين';
+      } else {
+        scoreEl.className = 'score-circle bad';
+        titleEl.textContent = '❌ سيرة ذاتية بحاجة إلى إعادة هيكلة';
+      }
+
+      scoreEl.textContent = score + '%';
+      summaryEl.innerHTML = summary.map(s => `<div>${s}</div>`).join('');
+
+      if (tips.length === 0) {
+        tipsEl.innerHTML = '<div class="tip-item" style="border-right-color:var(--sage);">🎉 مبروك! سيرتك الذاتية منظمة وكاملة.</div>';
+      } else {
+        tipsEl.innerHTML = tips.map(t => `<div class="tip-item">${t}</div>`).join('');
+      }
+    }
+
+    // ===== TOOL 8: TRANSLATION =====
     const MYMEMORY_API = 'https://api.mymemory.translated.net/get';
     let lastTranslationText = '';
     let lastTranslationTitle = '';
@@ -3021,7 +3361,7 @@
       btns.forEach(b => b.disabled = false);
     }
 
-    // ===== TOOL 7: PDF TRANSLATION =====
+    // ===== TOOL 9: PDF TRANSLATION =====
     let pdfTranslateText = '';
 
     async function loadPdfForTranslation(input) {
@@ -3094,7 +3434,7 @@
       spin.classList.remove('show');
     }
 
-    // ===== TOOL 8: ARABIC TEST =====
+    // ===== TOOL 10: ARABIC TEST =====
     const questionBank = [
       { q: 'ما هو إعراب كلمة "الكتاب" في جملة "قرأت الكتاب"؟', options: ['فاعل', 'مفعول به', 'مبتدأ', 'خبر'], correct: 1 },
       { q: 'أي الجمل التالية صحيحة إملائياً؟', options: ['ذهبت إلى المدرسة', 'ذهبت الي المدرسه', 'ذهبت ألى المدرسه', 'ذهبت إلة المدرسه'],
