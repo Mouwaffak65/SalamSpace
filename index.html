@@ -672,21 +672,24 @@
       }
     }
 
-    /* ===== CV PREVIEW - CORRECTED ===== */
+    /* ===== CV PREVIEW - CORRIGÉ RTL ===== */
     #cv-preview {
       background: var(--white);
       border: 1px solid var(--border);
       border-radius: var(--r-sm);
       margin-top: 16px;
-      font-family: 'Arial', 'Helvetica', 'Tahoma', sans-serif;
+      font-family: 'Tahoma', 'Arial', 'Cairo', sans-serif;
       overflow: hidden;
-      direction: ltr;
+      direction: rtl;
       text-align: right;
     }
+
     #cv-preview * {
-      direction: rtl;
-      font-family: 'Arial', 'Helvetica', 'Tahoma', sans-serif;
+      direction: rtl !important;
+      text-align: right !important;
+      font-family: 'Tahoma', 'Arial', 'Cairo', sans-serif !important;
     }
+
     .cv-header-bar {
       background: var(--forest);
       color: var(--white);
@@ -694,13 +697,14 @@
       display: flex;
       align-items: flex-start;
       gap: 16px;
+      direction: rtl;
     }
+
     .cv-photo-circle {
       width: 80px;
       height: 80px;
       border-radius: 50%;
       border: 3px solid var(--sand);
-      object-fit: cover;
       flex-shrink: 0;
       background: var(--sage);
       display: flex;
@@ -710,50 +714,65 @@
       color: rgba(255, 255, 255, 0.5);
       overflow: hidden;
     }
+
     .cv-photo-circle img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: block;
     }
+
     .cv-name {
       font-size: 1.3rem;
       font-weight: 700;
+      color: var(--white);
     }
+
     .cv-title-role {
       font-size: 0.85rem;
       opacity: 0.85;
       margin: 2px 0 8px;
+      color: var(--white);
     }
+
     .cv-contacts {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
       font-size: 0.75rem;
       opacity: 0.9;
+      color: var(--white);
     }
+
     .cv-body {
       padding: 16px 20px;
+      direction: rtl;
     }
+
     .cv-section {
       margin-bottom: 14px;
+      direction: rtl;
     }
+
     .cv-section-title {
       font-size: 0.7rem;
       font-weight: 700;
-      letter-spacing: 0.05em;
       text-transform: uppercase;
       color: var(--clay);
       border-bottom: 2px solid var(--clay);
       padding-bottom: 3px;
       margin-bottom: 8px;
+      direction: rtl;
     }
+
     .cv-section-body {
       font-size: 0.8rem;
       color: var(--ink);
       line-height: 1.7;
       white-space: pre-line;
+      direction: rtl;
     }
+
     .cv-footer {
       border-top: 1px solid var(--border);
       padding: 8px 20px;
@@ -1665,51 +1684,6 @@
     .install-guide ol li {
       margin-bottom: 4px;
     }
-
-    .faq-list {
-      max-width: 700px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    .faq-item {
-      background: var(--white);
-      border: 1.5px solid var(--border);
-      border-radius: var(--r);
-      overflow: hidden;
-    }
-    .faq-q {
-      padding: 18px 20px;
-      cursor: pointer;
-      font-weight: 700;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      user-select: none;
-    }
-    .faq-q::after {
-      content: '＋';
-      color: var(--clay);
-      font-size: 1.2rem;
-    }
-    .faq-item.open .faq-q::after {
-      content: '－';
-    }
-    .faq-a {
-      padding: 0 20px;
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.3s ease, padding 0.3s;
-    }
-    .faq-item.open .faq-a {
-      max-height: 300px;
-      padding: 0 20px 18px;
-    }
-    .faq-a p {
-      color: var(--muted);
-      font-size: 0.9rem;
-    }
   </style>
 </head>
 <body>
@@ -2286,7 +2260,7 @@
     </div>
   </div>
 
-  <!-- Tool: CV Builder -->
+  <!-- Tool: CV Builder - CORRIGÉ RTL -->
   <div class="modal-overlay" id="modal-cv-builder">
     <div class="modal" style="max-width:800px">
       <div class="modal-header">
@@ -2304,27 +2278,27 @@
           <div class="form-row">
             <div class="form-group">
               <label>الاسم الكامل *</label>
-              <input type="text" id="cv-name" placeholder="أحمد محمد الحسيني" oninput="updateCV()">
+              <input type="text" id="cv-name" placeholder="خالد موفق" oninput="updateCV()">
             </div>
             <div class="form-group">
               <label>التخصص</label>
-              <input type="text" id="cv-role" placeholder="طالب هندسة مدنية" oninput="updateCV()">
+              <input type="text" id="cv-role" placeholder="طالب علم" oninput="updateCV()">
             </div>
           </div>
           <div class="form-row">
             <div class="form-group">
               <label>البريد الإلكتروني</label>
-              <input type="email" id="cv-email" placeholder="email@example.com" oninput="updateCV()">
+              <input type="email" id="cv-email" placeholder="houdmouwaffal@gmail.com" oninput="updateCV()">
             </div>
             <div class="form-group">
               <label>رقم الهاتف</label>
-              <input type="tel" id="cv-phone" placeholder="+213 XXX XXX XXX" oninput="updateCV()">
+              <input type="tel" id="cv-phone" placeholder="+229 58 65 65 10" oninput="updateCV()">
             </div>
           </div>
           <div class="form-row">
             <div class="form-group">
               <label>المدينة / البلد</label>
-              <input type="text" id="cv-location" placeholder="الجزائر العاصمة، الجزائر" oninput="updateCV()">
+              <input type="text" id="cv-location" placeholder="باراكو، بنين" oninput="updateCV()">
             </div>
             <div class="form-group">
               <label>LinkedIn</label>
@@ -2336,31 +2310,31 @@
             <input type="file" id="cv-photo" accept="image/*" onchange="loadCVPhoto(this)" style="display:block;width:auto;padding:6px;">
           </div>
           <div class="form-group">
-            <label>ملخص شخصي</label>
-            <textarea id="cv-summary" placeholder="طالب جاد ومتحمس..." oninput="updateCV()"></textarea>
+            <label>الملخص الشخصي</label>
+            <textarea id="cv-summary" placeholder="طالب علم أبحث عن منحة دراسية..." oninput="updateCV()"></textarea>
           </div>
         </div>
 
         <div class="tab-panel" id="cv-edu">
           <div class="form-group">
             <label>المسار التعليمي</label>
-            <textarea id="cv-education" rows="4" placeholder="ليسانس في الهندسة المدنية — جامعة الجزائر، 2022" oninput="updateCV()"></textarea>
+            <textarea id="cv-education" rows="4" placeholder="الثانوية - مركز الدراسات الإسلامية والبحوث والدعوة - 2022" oninput="updateCV()"></textarea>
           </div>
           <div class="form-group">
             <label>الخبرات والتدريب</label>
-            <textarea id="cv-experience" rows="4" placeholder="تدريب صيفي — شركة البناء الوطنية، 2023" oninput="updateCV()"></textarea>
+            <textarea id="cv-experience" rows="4" placeholder="حفظ القرآن - 2018" oninput="updateCV()"></textarea>
           </div>
           <div class="form-group">
             <label>المهارات</label>
-            <textarea id="cv-skills" rows="3" placeholder="AutoCAD، Python، المايكروسوفت أوفيس" oninput="updateCV()"></textarea>
+            <textarea id="cv-skills" rows="3" placeholder="وورد، الترجيل، بيكتون" oninput="updateCV()"></textarea>
           </div>
           <div class="form-group">
             <label>اللغات</label>
-            <input type="text" id="cv-languages" placeholder="العربية (أصلية)، الفرنسية (ممتاز)" oninput="updateCV()">
+            <input type="text" id="cv-languages" placeholder="العربية (مبتدئ)، الفرنسية (جيد جدا)" oninput="updateCV()">
           </div>
           <div class="form-group">
             <label>المشاريع والإنجازات</label>
-            <textarea id="cv-projects" rows="3" placeholder="مشروع تخرج: تصميم جسر بمحطة قياس ذكية" oninput="updateCV()"></textarea>
+            <textarea id="cv-projects" rows="3" placeholder="مشروع تخرج: ..." oninput="updateCV()"></textarea>
           </div>
         </div>
 
@@ -2379,11 +2353,26 @@
               </div>
             </div>
             <div class="cv-body">
-              <div class="cv-section"><div class="cv-section-title">الملخص الشخصي</div><div class="cv-section-body" id="cv-p-summary">–</div></div>
-              <div class="cv-section"><div class="cv-section-title">التعليم</div><div class="cv-section-body" id="cv-p-education">–</div></div>
-              <div class="cv-section"><div class="cv-section-title">الخبرات</div><div class="cv-section-body" id="cv-p-experience">–</div></div>
-              <div class="cv-section"><div class="cv-section-title">المهارات واللغات</div><div class="cv-section-body" id="cv-p-skills">–</div></div>
-              <div class="cv-section"><div class="cv-section-title">المشاريع</div><div class="cv-section-body" id="cv-p-projects">–</div></div>
+              <div class="cv-section">
+                <div class="cv-section-title">الملخص الشخصي</div>
+                <div class="cv-section-body" id="cv-p-summary">–</div>
+              </div>
+              <div class="cv-section">
+                <div class="cv-section-title">التعليم</div>
+                <div class="cv-section-body" id="cv-p-education">–</div>
+              </div>
+              <div class="cv-section">
+                <div class="cv-section-title">الخبرات</div>
+                <div class="cv-section-body" id="cv-p-experience">–</div>
+              </div>
+              <div class="cv-section">
+                <div class="cv-section-title">المهارات واللغات</div>
+                <div class="cv-section-body" id="cv-p-skills">–</div>
+              </div>
+              <div class="cv-section">
+                <div class="cv-section-title">المشاريع</div>
+                <div class="cv-section-body" id="cv-p-projects">–</div>
+              </div>
             </div>
             <div class="cv-footer">CV généré par SalamSpace — salam.space</div>
           </div>
@@ -2830,7 +2819,6 @@
         const ab = await compressFile.arrayBuffer();
         const doc = await PDFDocument.load(ab, { ignoreEncryption: true });
 
-        // Re-save with compression options
         const saveOptions = {
           useObjectStreams: true,
           addDefaultPage: false,
@@ -2859,14 +2847,16 @@
       btn.disabled = false;
     }
 
-    // ===== TOOL 5: CV BUILDER =====
+    // ===== TOOL 5: CV BUILDER - CORRIGÉ RTL =====
     let cvPhotoDataUrl = '';
 
     function loadCVPhoto(input) {
       if (!input.files[0]) return;
       const reader = new FileReader();
-      reader.onload = e => { cvPhotoDataUrl = e.target.result;
-        updateCV(); };
+      reader.onload = e => {
+        cvPhotoDataUrl = e.target.result;
+        updateCV();
+      };
       reader.readAsDataURL(input.files[0]);
     }
 
@@ -2880,8 +2870,8 @@
         'cv-p-summary': document.getElementById('cv-summary').value || '–',
         'cv-p-education': document.getElementById('cv-education').value || '–',
         'cv-p-experience': document.getElementById('cv-experience').value || '–',
-        'cv-p-skills': (document.getElementById('cv-skills').value || '') + (document.getElementById('cv-languages').value ? '\n' + document
-          .getElementById('cv-languages').value : '') || '–',
+        'cv-p-skills': (document.getElementById('cv-skills').value || '') +
+          (document.getElementById('cv-languages').value ? '\n' + document.getElementById('cv-languages').value : '') || '–',
         'cv-p-projects': document.getElementById('cv-projects').value || '–'
       };
       Object.entries(fields).forEach(([id, val]) => {
@@ -2897,11 +2887,30 @@
       btns.forEach(b => b.disabled = true);
       try {
         const element = document.getElementById('cv-preview');
+
+        // Forcer la direction RTL avant la capture
+        element.style.direction = 'rtl';
+        element.style.textAlign = 'right';
+
         const canvas = await html2canvas(element, {
           scale: 2,
           useCORS: true,
-          backgroundColor: '#fff'
+          backgroundColor: '#ffffff',
+          logging: false,
+          onclone: function(clonedDoc) {
+            const clonedEl = clonedDoc.getElementById('cv-preview');
+            if (clonedEl) {
+              clonedEl.style.direction = 'rtl';
+              clonedEl.style.textAlign = 'right';
+              const allChildren = clonedEl.querySelectorAll('*');
+              allChildren.forEach(child => {
+                child.style.direction = 'rtl';
+                child.style.textAlign = 'right';
+              });
+            }
+          }
         });
+
         if (format === 'jpeg') {
           const link = document.createElement('a');
           link.download = 'السيرة-الذاتية-سلام-سبيس.jpg';
@@ -2909,12 +2918,17 @@
           link.click();
         } else {
           const { jsPDF } = window.jspdf;
-          const pdf = new jsPDF({ orientation: canvas.width > canvas.height ? 'landscape' : 'portrait', unit: 'px',
-            format: [canvas.width / 2, canvas.height / 2] });
+          const pdf = new jsPDF({
+            orientation: canvas.width > canvas.height ? 'landscape' : 'portrait',
+            unit: 'px',
+            format: [canvas.width / 2, canvas.height / 2]
+          });
           pdf.addImage(canvas.toDataURL('image/jpeg', 0.9), 'JPEG', 0, 0, canvas.width / 2, canvas.height / 2);
           pdf.save('السيرة-الذاتية-سلام-سبيس.pdf');
         }
-      } catch (err) { alert('خطأ: ' + err.message); }
+      } catch (err) {
+        alert('خطأ: ' + err.message);
+      }
       btns.forEach(b => b.disabled = false);
     }
 
