@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JPEG إلى PDF | salamm.online</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    /* mêmes styles que la page 1 */
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+    body { background: #f4f8fe; min-height: 100vh; padding: 1rem; }
+    .container { max-width: 1200px; margin: 0 auto; }
+    .header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.85); backdrop-filter: blur(12px); padding: 0.6rem 1.8rem; border-radius: 60px; box-shadow: 0 10px 30px rgba(0,20,40,0.08); margin-bottom: 2rem; border: 1px solid rgba(255,255,255,0.7); }
+    .logo h1 { font-size: 1.9rem; font-weight: 700; color: #0b2a3e; display: flex; align-items: center; gap: 6px; }
+    .logo h1 i { color: #1f6390; }
+    .main-nav { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem 1.2rem; }
+    .main-nav a { color: #1a3b52; text-decoration: none; font-weight: 500; font-size: 0.95rem; padding: 0.4rem 0.2rem; border-bottom: 2px solid transparent; transition: 0.2s; display: flex; align-items: center; gap: 5px; }
+    .main-nav a:hover { border-bottom-color: #1f6390; }
+    .main-nav a i { color: #2a7faa; }
+    .main-nav .nav-cta { background: #1a4b6d; color: white; padding: 0.4rem 1.4rem; border-radius: 40px; border-bottom: none; }
+    .main-nav .nav-cta:hover { background: #0f3a57; border-bottom: none; }
+    .menu-toggle { display: none; background: none; border: none; font-size: 1.8rem; color: #0b2a3e; cursor: pointer; }
+    .tool-page { background: white; border-radius: 40px; padding: 2.5rem; box-shadow: 0 8px 30px rgba(0,20,30,0.06); }
+    .tool-page h2 { font-size: 2rem; color: #0b2a3e; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 12px; }
+    .tool-page h2 i { color: #1f6390; }
+    .tool-page .desc { color: #2c5779; font-size: 1.1rem; margin-bottom: 2rem; border-right: 4px solid #1f6390; padding-right: 1rem; }
+    .upload-area { border: 3px dashed #cbdae6; border-radius: 30px; padding: 2rem; text-align: center; background: #f8fbfe; transition: 0.3s; cursor: pointer; }
+    .upload-area:hover { border-color: #1f6390; background: #f0f6fc; }
+    .upload-area.dragover { border-color: #1f6390; background: #e3eef7; }
+    .upload-area i { font-size: 4rem; color: #1f6390; margin-bottom: 1rem; }
+    .upload-area p { color: #1a3b52; font-size: 1.1rem; }
+    .upload-area .btn { display: inline-block; margin-top: 1.2rem; background: #1a4b6d; color: white; padding: 0.8rem 2.5rem; border-radius: 40px; text-decoration: none; font-weight: 600; border: none; cursor: pointer; }
+    .upload-area .btn:hover { background: #0f3a57; }
+    .preview-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+    .preview-grid img { width: 100%; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: 2px solid #eaf1f7; }
+    .download-btn { margin-top: 1.5rem; background: #27ae60; color: white; padding: 0.8rem 2.5rem; border-radius: 40px; border: none; font-weight: 600; cursor: pointer; display: none; }
+    .download-btn:hover { background: #219a52; }
+    .footer { margin-top: 2.5rem; text-align: center; color: #2c5779; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 1.5rem; display: flex; flex-wrap: wrap; justify-content: center; gap: 0.8rem 1.8rem; }
+    .footer a { color: #1f6390; text-decoration: none; }
+    @media (max-width: 820px) { .menu-toggle { display: block; } .main-nav { display: none; flex-direction: column; width: 100%; background: white; padding: 1rem; border-radius: 32px; margin-top: 0.8rem; } .main-nav.open { display: flex; } .header { padding: 0.6rem 1rem; } .tool-page { padding: 1.5rem; } }
+  </style>
+</head>
+<body>
+<div class="container">
+  <header class="header">
+    <div class="logo"><h1><i class="fas fa-graduation-cap"></i> salamm.online</h1></div>
+    <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+    <nav class="main-nav" id="mainNav">
+      <a href="index.html"><i class="fas fa-home"></i> الرئيسية</a>
+      <a href="index.html#tools"><i class="fas fa-tools"></i> الأدوات</a>
+      <a href="index.html#conseils"><i class="fas fa-lightbulb"></i> نصائح</a>
+      <a href="about.html"><i class="fas fa-info-circle"></i> عن الموقع</a>
+      <a href="contact.html"><i class="fas fa-envelope"></i> اتصل بنا</a>
+      <a href="arabic-test.html" class="nav-cta"><i class="fas fa-certificate"></i> اختبار اللغة</a>
+    </nav>
+  </header>
+
+  <section class="tool-page">
+    <h2><i class="fas fa-image"></i> JPEG إلى PDF</h2>
+    <div class="desc">حوّل صورك بصيغة JPEG إلى ملف PDF واحد.</div>
+    
+    <div class="upload-area" id="dropZone">
+      <i class="fas fa-cloud-upload-alt"></i>
+      <p>اسحب صور JPEG هنا أو انقر لاختيارها</p>
+      <input type="file" id="fileInput" accept="image/*" multiple style="display:none;" />
+      <button class="btn" id="uploadBtn"><i class="fas fa-upload"></i> اختيار صور</button>
+      <p style="margin-top: 1rem; font-size: 0.9rem; color: #6f8ca0;">يدعم الصور حتى 5 ميجابايت لكل صورة</p>
+    </div>
+
+    <div id="previewContainer"></div>
+    <button class="download-btn" id="downloadBtn"><i class="fas fa-download"></i> تحميل PDF</button>
+  </section>
+
+  <footer class="footer">
+    <span><i class="fas fa-graduation-cap"></i> salamm.online</span>
+    <a href="about.html">عن الموقع</a>
+    <a href="privacy.html">سياسة الخصوصية</a>
+    <a href="terms.html">شروط الاستخدام</a>
+  </footer>
+</div>
+
+<script>
+  // Menu toggle
+  const toggle = document.getElementById('menuToggle');
+  const nav = document.getElementById('mainNav');
+  if(toggle && nav) { toggle.addEventListener('click', () => { nav.classList.toggle('open'); }); }
+
+  const dropZone = document.getElementById('dropZone');
+  const fileInput = document.getElementById('fileInput');
+  const uploadBtn = document.getElementById('uploadBtn');
+  const previewContainer = document.getElementById('previewContainer');
+  const downloadBtn = document.getElementById('downloadBtn');
+
+  let selectedImages = [];
+
+  uploadBtn.addEventListener('click', (e) => { e.stopPropagation(); fileInput.click(); });
+  dropZone.addEventListener('click', () => fileInput.click());
+
+  dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('dragover'); });
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+  dropZone.addEventListener('drop', (e) => { e.preventDefault(); dropZone.classList.remove('dragover'); handleFiles(e.dataTransfer.files); });
+
+  fileInput.addEventListener('change', (e) => { if(e.target.files.length) handleFiles(e.target.files); });
+
+  function handleFiles(files) {
+    const validFiles = Array.from(files).filter(f => f.type.startsWith('image/'));
+    if(validFiles.length === 0) { alert('الرجاء اختيار صور صالحة'); return; }
+    
+    selectedImages = [];
+    previewContainer.innerHTML = '<h3 style="margin: 1rem 0 0.5rem; color:#0b2a3e;">الصور المحددة:</h3><div class="preview-grid"></div>';
+    const grid = previewContainer.querySelector('.preview-grid');
+    
+    validFiles.forEach(file => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = document.createElement('img');
+        img.src = e.target.result;
+        grid.appendChild(img);
+        selectedImages.push(e.target.result);
+        if(selectedImages.length === validFiles.length) downloadBtn.style.display = 'inline-block';
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  downloadBtn.addEventListener('click', () => {
+    if(selectedImages.length === 0) return;
+    // Créer un PDF simple avec jsPDF
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    const pageWidth = 210;
+    const pageHeight = 297;
+    
+    selectedImages.forEach((imgData, idx) => {
+      if(idx > 0) pdf.addPage();
+      const img = new Image();
+      img.src = imgData;
+      const aspectRatio = img.width / img.height;
+      let width = pageWidth - 20;
+      let height = width / aspectRatio;
+      if(height > pageHeight - 20) { height = pageHeight - 20; width = height * aspectRatio; }
+      const x = (pageWidth - width) / 2;
+      const y = (pageHeight - height) / 2;
+      pdf.addImage(imgData, 'JPEG', x, y, width, height);
+    });
+    
+    pdf.save('images_converties.pdf');
+  });
+
+  // Load jsPDF
+  const script = document.createElement('script');
+  script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+  document.head.appendChild(script);
+</script>
+</body>
+</html>
