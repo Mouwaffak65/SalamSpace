@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>مترجم النصوص | salamm.online</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+    body { background: #f4f8fe; min-height: 100vh; padding: 1rem; }
+    .container { max-width: 1200px; margin: 0 auto; }
+    .header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.85); backdrop-filter: blur(12px); padding: 0.6rem 1.8rem; border-radius: 60px; box-shadow: 0 10px 30px rgba(0,20,40,0.08); margin-bottom: 2rem; border: 1px solid rgba(255,255,255,0.7); }
+    .logo h1 { font-size: 1.9rem; font-weight: 700; color: #0b2a3e; display: flex; align-items: center; gap: 6px; }
+    .logo h1 i { color: #1f6390; }
+    .main-nav { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem 1.2rem; }
+    .main-nav a { color: #1a3b52; text-decoration: none; font-weight: 500; font-size: 0.95rem; padding: 0.4rem 0.2rem; border-bottom: 2px solid transparent; transition: 0.2s; display: flex; align-items: center; gap: 5px; }
+    .main-nav a:hover { border-bottom-color: #1f6390; }
+    .main-nav a i { color: #2a7faa; }
+    .main-nav .nav-cta { background: #1a4b6d; color: white; padding: 0.4rem 1.4rem; border-radius: 40px; border-bottom: none; }
+    .main-nav .nav-cta:hover { background: #0f3a57; border-bottom: none; }
+    .menu-toggle { display: none; background: none; border: none; font-size: 1.8rem; color: #0b2a3e; cursor: pointer; }
+    .tool-page { background: white; border-radius: 40px; padding: 2.5rem; box-shadow: 0 8px 30px rgba(0,20,30,0.06); }
+    .tool-page h2 { font-size: 2rem; color: #0b2a3e; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 12px; }
+    .tool-page h2 i { color: #1f6390; }
+    .tool-page .desc { color: #2c5779; font-size: 1.1rem; margin-bottom: 2rem; border-right: 4px solid #1f6390; padding-right: 1rem; }
+    .translator-container { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .lang-select { display: flex; gap: 1rem; margin-bottom: 0.8rem; flex-wrap: wrap; }
+    .lang-select select { padding: 0.5rem 1rem; border-radius: 12px; border: 2px solid #dce6ef; font-size: 0.95rem; background: white; }
+    .lang-select select:focus { border-color: #1f6390; outline: none; }
+    .text-area { width: 100%; min-height: 200px; padding: 1rem; border: 2px solid #dce6ef; border-radius: 16px; font-size: 1rem; resize: vertical; transition: 0.2s; }
+    .text-area:focus { border-color: #1f6390; outline: none; }
+    .swap-btn { background: #e8f0f7; border: none; padding: 0.8rem 1.2rem; border-radius: 50%; cursor: pointer; font-size: 1.5rem; color: #1f6390; transition: 0.2s; align-self: center; }
+    .swap-btn:hover { background: #d5e2ed; transform: rotate(180deg); }
+    .btn { background: #1a4b6d; color: white; padding: 0.8rem 2.5rem; border-radius: 40px; border: none; font-weight: 600; cursor: pointer; font-size: 1rem; margin-top: 1rem; }
+    .btn:hover { background: #0f3a57; }
+    .btn-success { background: #27ae60; }
+    .btn-success:hover { background: #219a52; }
+    .footer { margin-top: 2.5rem; text-align: center; color: #2c5779; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 1.5rem; display: flex; flex-wrap: wrap; justify-content: center; gap: 0.8rem 1.8rem; }
+    .footer a { color: #1f6390; text-decoration: none; }
+    @media (max-width: 820px) { .menu-toggle { display: block; } .main-nav { display: none; flex-direction: column; width: 100%; background: white; padding: 1rem; border-radius: 32px; margin-top: 0.8rem; } .main-nav.open { display: flex; } .header { padding: 0.6rem 1rem; } .tool-page { padding: 1.5rem; } .translator-container { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<div class="container">
+  <header class="header">
+    <div class="logo"><h1><i class="fas fa-graduation-cap"></i> salamm.online</h1></div>
+    <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+    <nav class="main-nav" id="mainNav">
+      <a href="index.html"><i class="fas fa-home"></i> الرئيسية</a>
+      <a href="index.html#tools"><i class="fas fa-tools"></i> الأدوات</a>
+      <a href="index.html#conseils"><i class="fas fa-lightbulb"></i> نصائح</a>
+      <a href="about.html"><i class="fas fa-info-circle"></i> عن الموقع</a>
+      <a href="contact.html"><i class="fas fa-envelope"></i> اتصل بنا</a>
+      <a href="arabic-test.html" class="nav-cta"><i class="fas fa-certificate"></i> اختبار اللغة</a>
+    </nav>
+  </header>
+
+  <section class="tool-page">
+    <h2><i class="fas fa-language"></i> مترجم النصوص</h2>
+    <div class="desc">ترجمة فورية بين العربية والإنجليزية والفرنسية.</div>
+    
+    <div class="translator-container">
+      <div>
+        <div class="lang-select">
+          <select id="sourceLang">
+            <option value="ar">العربية</option>
+            <option value="en">English</option>
+            <option value="fr">Français</option>
+          </select>
+          <button class="swap-btn" id="swapBtn"><i class="fas fa-arrows-alt-h"></i></button>
+        </div>
+        <textarea class="text-area" id="sourceText" placeholder="أدخل النص هنا..."></textarea>
+      </div>
+      <div>
+        <div class="lang-select">
+          <select id="targetLang">
+            <option value="en">English</option>
+            <option value="ar">العربية</option>
+            <option value="fr">Français</option>
+          </select>
+        </div>
+        <textarea class="text-area" id="targetText" placeholder="الترجمة ستظهر هنا..." readonly></textarea>
+      </div>
+    </div>
+
+    <button class="btn btn-success" id="translateBtn"><i class="fas fa-language"></i> ترجمة</button>
+    <button class="btn btn-secondary" id="clearBtn" style="background:#e8f0f7; color:#0b2a3e; margin-right:10px;"><i class="fas fa-eraser"></i> مسح</button>
+  </section>
+
+  <footer class="footer">
+    <span><i class="fas fa-graduation-cap"></i> salamm.online</span>
+    <a href="about.html">عن الموقع</a>
+    <a href="privacy.html">سياسة الخصوصية</a>
+    <a href="terms.html">شروط الاستخدام</a>
+  </footer>
+</div>
+
+<script>
+  const toggle = document.getElementById('menuToggle');
+  const nav = document.getElementById('mainNav');
+  if(toggle && nav) { toggle.addEventListener('click', () => { nav.classList.toggle('open'); }); }
+
+  const sourceLang = document.getElementById('sourceLang');
+  const targetLang = document.getElementById('targetLang');
+  const sourceText = document.getElementById('sourceText');
+  const targetText = document.getElementById('targetText');
+  const swapBtn = document.getElementById('swapBtn');
+  const translateBtn = document.getElementById('translateBtn');
+  const clearBtn = document.getElementById('clearBtn');
+
+  // Simple dictionary-based translation (for demo purposes)
+  const dictionary = {
+    'ar': {
+      'en': {
+        'مرحبا': 'Hello',
+        'كيف حالك': 'How are you',
+        'شكرا': 'Thank you',
+        'السلام عليكم': 'Peace be upon you',
+        'طالب': 'Student',
+        'جامعة': 'University',
+        'منحة': 'Scholarship',
+        'دراسة': 'Study',
+        'كتاب': 'Book',
+        'مدرسة': 'School',
+        'معلم': 'Teacher',
+        'عربي': 'Arabic',
+        'إنجليزي': 'English',
+        'فرنسي': 'French'
+      },
+      'fr': {
+        'مرحبا': 'Bonjour',
+        'كيف حالك': 'Comment allez-vous',
+        'شكرا': 'Merci',
+        'السلام عليكم': 'Salam alaykum',
+        'طالب': 'Étudiant',
+        'جامعة': 'Université',
+        'منحة': 'Bourse',
+        'دراسة': 'Étude',
+        'كتاب': 'Livre',
+        'مدرسة': 'École',
+        'معلم': 'Enseignant',
+        'عربي': 'Arabe',
+        'إنجليزي': 'Anglais',
+        'فرنسي': 'Français'
+      }
+    },
+    'en': {
+      'ar': {
+        'Hello': 'مرحبا',
+        'How are you': 'كيف حالك',
+        'Thank you': 'شكرا',
+        'Peace be upon you': 'السلام عليكم',
+        'Student': 'طالب',
+        'University': 'جامعة',
+        'Scholarship': 'منحة',
+        'Study': 'دراسة',
+        'Book': 'كتاب',
+        'School': 'مدرسة',
+        'Teacher': 'معلم',
+        'Arabic': 'عربي',
+        'English': 'إنجليزي',
+        'French': 'فرنسي'
+      },
+      'fr': {
+        'Hello': 'Bonjour',
+        'How are you': 'Comment allez-vous',
+        'Thank you': 'Merci',
+        'Peace be upon you': 'Salam alaykum',
+        'Student': 'Étudiant',
+        'University': 'Université',
+        'Scholarship': 'Bourse',
+        'Study': 'Étude',
+        'Book': 'Livre',
+        'School': 'École',
+        'Teacher': 'Enseignant',
+        'Arabic': 'Arabe',
+        'English': 'Anglais',
+        'French': 'Français'
+      }
+    },
+    'fr': {
+      'ar': {
+        'Bonjour': 'مرحبا',
+        'Comment allez-vous': 'كيف حالك',
+        'Merci': 'شكرا',
+        'Salam alaykum': 'السلام عليكم',
+        'Étudiant': 'طالب',
+        'Université': 'جامعة',
+        'Bourse': 'منحة',
+        'Étude': 'دراسة',
+        'Livre': 'كتاب',
+        'École': 'مدرسة',
+        'Enseignant': 'معلم',
+        'Arabe': 'عربي',
+        'Anglais': 'إنجليزي',
+        'Français': 'فرنسي'
+      },
+      'en': {
+        'Bonjour': 'Hello',
+        'Comment allez-vous': 'How are you',
+        'Merci': 'Thank you',
+        'Salam alaykum': 'Peace be upon you',
+        'Étudiant': 'Student',
+        'Université': 'University',
+        'Bourse': 'Scholarship',
+        'Étude': 'Study',
+        'Livre': 'Book',
+        'École': 'School',
+        'Enseignant': 'Teacher',
+        'Arabe': 'Arabic',
+        'Anglais': 'English',
+        'Français': 'French'
+      }
+    }
+  };
+
+  function translate(text, from, to) {
+    if(from === to) return text;
+    const dict = dictionary[from]?.[to];
+    if(!dict) return '⚠️ الترجمة غير متوفرة لهذه الكلمة';
+    
+    const words = text.split(' ');
+    const translated = words.map(word => {
+      const clean = word.replace(/[،،.!?،]/g, '');
+      const translation = dict[clean] || dict[clean.toLowerCase()] || word;
+      // Preserve punctuation
+      const punct = word.match(/[،،.!?،]$/)?.[0] || '';
+      return translation + punct;
+    });
+    return translated.join(' ');
+  }
+
+  translateBtn.addEventListener('click', function() {
+    const text = sourceText.value.trim();
+    if(!text) { targetText.value = 'الرجاء إدخال النص'; return; }
+    
+    const from = sourceLang.value;
+    const to = targetLang.value;
+    const result = translate(text, from, to);
+    targetText.value = result;
+  });
+
+  swapBtn.addEventListener('click', function() {
+    const tempLang = sourceLang.value;
+    sourceLang.value = targetLang.value;
+    targetLang.value = tempLang;
+    
+    const tempText = sourceText.value;
+    sourceText.value = targetText.value;
+    targetText.value = tempText;
+  });
+
+  clearBtn.addEventListener('click', function() {
+    sourceText.value = '';
+    targetText.value = '';
+  });
+
+  // Auto-translate on language change
+  sourceLang.addEventListener('change', () => {
+    if(sourceText.value.trim()) translateBtn.click();
+  });
+  targetLang.addEventListener('change', () => {
+    if(sourceText.value.trim()) translateBtn.click();
+  });
+</script>
+</body>
+</html>
