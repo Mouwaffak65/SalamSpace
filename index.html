@@ -338,7 +338,7 @@
     });
   }
 
-  // ===== POP-UP =====
+  // ===== POP-UP - S'AFFICHE À CHAQUE VISITE =====
   const popupOverlay = document.getElementById('popupOverlay');
   const popupClose = document.getElementById('popupClose');
   const popupSkip = document.getElementById('popupSkip');
@@ -349,7 +349,6 @@
 
   function showPopup() {
     if(popupShown) return;
-    if(sessionStorage.getItem('popupClosed') === 'true') return;
     popupShown = true;
     popupOverlay.classList.add('active');
     document.body.style.overflow = 'hidden';
@@ -358,7 +357,7 @@
   function hidePopup() {
     popupOverlay.classList.remove('active');
     document.body.style.overflow = '';
-    sessionStorage.setItem('popupClosed', 'true');
+    // NE PAS enregistrer dans sessionStorage pour que le pop-up réapparaisse à chaque visite
   }
 
   // Afficher le pop-up après 5 secondes
@@ -375,8 +374,6 @@
 
   // Bouton de téléchargement - redirige vers le lien spécial
   popupDownloadBtn.addEventListener('click', function(e) {
-    // Le lien href est déjà défini dans le HTML
-    // On ferme le pop-up après le clic
     hidePopup();
   });
 
@@ -387,15 +384,21 @@
     }
   }, { passive: false });
 
-  // Réafficher si l'utilisateur revient après avoir quitté (mais pas si fermé)
+  // ===== RÉAFFICHER LE POP-UP SI L'UTILISATEUR REVIENT SUR LA PAGE =====
+  // À chaque fois que l'utilisateur revient sur l'onglet, on réaffiche le pop-up après 5 secondes
   document.addEventListener('visibilitychange', function() {
-    if(!document.hidden && !popupShown && !sessionStorage.getItem('popupClosed')) {
-      popupTimeout = setTimeout(showPopup, 5000);
+    if(!document.hidden) {
+      // Si le pop-up a déjà été fermé et que l'utilisateur revient
+      if(!popupOverlay.classList.contains('active') && !popupShown) {
+        popupTimeout = setTimeout(showPopup, 5000);
+      }
+      // Si le pop-up est déjà affiché, on ne fait rien
     }
   });
 
   console.log('🔔 Pop-up de téléchargement apparaîtra dans 5 secondes.');
   console.log('📱 Lien de téléchargement: ' + popupDownloadBtn.href);
+  console.log('🔄 Le pop-up réapparaît à chaque visite sur la page.');
 </script>
 </body>
 </html>
